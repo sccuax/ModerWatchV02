@@ -2,6 +2,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+require('dotenv').config();
+
 
 
 //instanciating express
@@ -69,8 +71,8 @@ app.delete('/api/students/:id', (req, res) => {
     res.json(student);
 }); */
 
-
-mongoose.connect('mongodb+srv://jonathan_velez_parra:3127289175@sena.hvugxwv.mongodb.net/?retryWrites=true&w=majority&appName=SENA')
+//conexionn to the database
+mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('you are connected to SENA database');
     })

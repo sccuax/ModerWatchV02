@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const postSchema  = mongoose.Schema ({
     //here we're typing the data we want to store in each post
     name: { type: String, required: true },
-    age: { type: Number, required: true },
-    enroll: { type: Boolean, default: false }
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
 
 }); 
 
