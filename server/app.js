@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 require('dotenv').config();
 
 
@@ -13,63 +14,28 @@ const port = process.env.PORT || 3000;
 
 // Middlewares
 //configuiring the app to use bodyParser, and to look for JSON data in the request body
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//importing the post route
-const postRoute = require('./routes/post');
-app.use('/api/students', postRoute);
+//importing the route files
+
+const authRoutes = require("./routes/auth");
+const productRoutes = require("./routes/products");
+const supplierRoutes = require("./routes/suppliers");
+const orderRoutes = require("./routes/orders");
+
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/suppliers", supplierRoutes);
+app.use("/api/orders", orderRoutes);
 
 
 //here we're defining a simple route to make sure everything is working and send a message to the user
 app.get('/', (_req, res) => {
-    res.send('Node js API');   
+    res.send('ModernWatch API is running 🚀');   
 });  
-
-//array simulating a database
-/* const studendts = [
-    { id: 1, name: 'Jonathan', age: 20, enroll: true },
-    { id: 2, name: 'Camilo', age: 20, enroll: false },  
-    { id: 3, name: 'David', age: 20, enroll: true }
-];
- */
-/* 
-// here is teh route to get all students
-app.get('/api/students', (_req, res) => {
-    res.json(studendts);});
-
-// here is the route to get a single student by id
-app.get('/api/students/:id', (req, res) => {
-    const student = studendts.find(s => s.id === parseInt(req.params.id));
-    if (!student) return res.status(404).send('The student with the given ID was not found.');
-    res.json(student);
-});
-
-//here is the route to create a new student in the database
-app.post('/api/students', (req, res) => {
-    const student = {
-        id: studendts.length + 1,   
-        name: req.body.name,
-        age: parseInt(req.body.age),
-        enroll: (req.body.enroll === 'true')
-    
-    };
-    studendts.push(student);
-    res.json(student);
-});
-
-//here is the route to delete a student by id
-app.delete('/api/students/:id', (req, res) => {
-    const student = studendts.find(s => s.id === parseInt(req.params.id));
-    if (!student) return res.status(404).send('This student does not exist.');
-    // Remove the student from the array
-    const index = studendts.indexOf(student);
-    if (index > -1) {
-        studendts.splice(index, 1);
-    }
-    res.json(student);
-}); */
 
 //conexionn to the database
 mongoose.connect(process.env.MONGO_URI)
@@ -85,4 +51,3 @@ mongoose.connect(process.env.MONGO_URI)
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-
