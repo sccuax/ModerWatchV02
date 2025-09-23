@@ -2,20 +2,20 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
 // Sign up (registro)
-exports.signup = async (req, res) => {
+ const signup = async (req, res) => {
     try {
     const { name, surname, email, dateOfBirth, nationalId, password } = req.body;
 
-    // Validar que no exista el usuario
+    // Here we're validatin if the user alreasy exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-        return res.status(400).json({ message: "El correo ya está registrado" });
+        return res.status(400).json({ message: "Email already exists" });
     }
 
-    // Encriptar contraseña
+    // Encoding password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear usuario
+    // Create user
     const newUser = new User({
         name,
         surname,
@@ -26,9 +26,34 @@ exports.signup = async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).json({ message: "Usuario registrado con éxito" });
+    res.status(201).json({ message: "Signed up successfuly" });
 
     } catch (err) {
-        res.status(500).json({ error: "Error en el registro", details: err.message });
+        res.status(500).json({ error: "Error signing up", details: err.message });
     }
 };
+
+//login
+const login = async (req, res) => {
+    try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ error: "User not found" });
+
+    const validPass = await bcrypt.compare(password, user.password);
+    if (!validPass) return res.status(400).json({ error: "invalid password" });
+
+    const token = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.SECRET_KEY,
+        { expiresIn: "3h" }
+    );
+
+    res.json({ token });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { signup, login };

@@ -21,15 +21,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //importing the route files
 
-const authRoutes = require("./routes/auth");
-const productRoutes = require("./routes/products");
-const supplierRoutes = require("./routes/suppliers");
-const orderRoutes = require("./routes/orders");
+const authRoutes = require("./routes/auth"); 
+const userRoutes = require("./routes/users");
+//const productRoutes = require("./routes/products");
+//const supplierRoutes = require("./routes/suppliers");
+//const orderRoutes = require("./routes/orders");
 
 app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/suppliers", supplierRoutes);
-app.use("/api/orders", orderRoutes);
+app.use("/api/users", userRoutes);
+//app.use("/api/products", productRoutes);
+//app.use("/api/suppliers", supplierRoutes);
+//app.use("/api/orders", orderRoutes);
 
 
 //here we're defining a simple route to make sure everything is working and send a message to the user

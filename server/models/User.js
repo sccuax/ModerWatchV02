@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     surname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     dateOfBirth: { type: Date, required: true },
-    nationalId: { type: String, required: true, unique: true }, // Documento de identidad
+    nationalId: { type: String, required: true, unique: true }, // Nacional identification
     password: { type: String, required: true }
 }, { timestamps: true });
 
