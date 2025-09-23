@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
+
+import Login from "./pages/Auth/Login";
+import UserDashboard from "./pages/Dashboard/UserDashboard";
+import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const token = localStorage.getItem("token"); // guarda el JWT cuando haces login
+  let user = null;
+
+  if (token) {
+    try {
+      user = jwtDecode(token); // aquí obtienes { id, email, role, iat, exp, ... }
+      // 👇 opcional: validar expiración del token
+      if (user.exp * 1000 < Date.now()) {
+        localStorage.removeItem("token");
+        user = null;
+      }
+    } catch (error) {
+      console.error("Token inválido:", error);
+      localStorage.removeItem("token");
+    }
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <Routes>
+        {/* Si no hay usuario, siempre va al login */}
+        <Route
+          path="/"
+          element={
+            !user ? (
+              <Login />
+            ) : (
+              <Navigate to={user.role === "admin" ? "/dashboard/admin" : "/dashboard/user"} />
+            )
+          }
+        />
+
+        {/* Dashboards protegidos */}
+        <Route
+          path="/dashboard/user"
+          element={user?.role === "user" ? <UserDashboard /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/dashboard/admin"
+          element={user?.role === "admin" ? <AdminDashboard /> : <Navigate to="/" />}
+        />
+
+        {/* Redirección por defecto */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
