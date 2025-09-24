@@ -11,8 +11,8 @@ function App() {
 
   if (token) {
     try {
-      user = jwtDecode(token); // aquí obtienes { id, email, role, iat, exp, ... }
-      // 👇 opcional: validar expiración del token
+      user = jwtDecode(token); // here we get { id, email, role, iat, exp, ... }
+      // optional: validating token expiration
       if (user.exp * 1000 < Date.now()) {
         localStorage.removeItem("token");
         user = null;
@@ -26,7 +26,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Si no hay usuario, siempre va al login */}
+        {/* if there is no users, it redirects to login page */}
         <Route
           path="/"
           element={
@@ -38,7 +38,7 @@ function App() {
           }
         />
 
-        {/* Dashboards protegidos */}
+        {/* Protected Dashboards */}
         <Route
           path="/dashboard/user"
           element={user?.role === "user" ? <UserDashboard /> : <Navigate to="/" />}
@@ -48,7 +48,7 @@ function App() {
           element={user?.role === "admin" ? <AdminDashboard /> : <Navigate to="/" />}
         />
 
-        {/* Redirección por defecto */}
+        {/* default redirection */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

@@ -1,3 +1,206 @@
+@import "tailwindcss";
+
+@theme {
+   /* ---------------- PRIMITIVOS ---------------- */
+  /* Purple */
+  --color-purple-50: #f5f3ff;
+  --color-purple-100: #ede9fe;
+  --color-purple-200: #ddd6fe;
+  --color-purple-300: #c4b5fd;
+  --color-purple-400: #a78bfa;
+  --color-purple-500: #8b5cf6;
+  --color-purple-600: #7c3aed;
+  --color-purple-700: #6d28d9;
+  --color-purple-800: #5b21b6;
+  --color-purple-900: #4c1d95;
+
+  /* Green */
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+
+  /* Red */
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+
+  /* Neutral */
+  --color-neutral-50: #f9fafb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827;
+
+  /* Yellow */
+  --color-yellow-50: #fefce8;
+  --color-yellow-100: #fef9c3;
+  --color-yellow-200: #fef08a;
+  --color-yellow-300: #fde047;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+  --color-yellow-600: #ca8a04;
+  --color-yellow-700: #a16207;
+  --color-yellow-800: #854d0e;
+  --color-yellow-900: #713f12;
+
+  /* Sizing */
+  --size-16: 16px;
+  --size-20: 20px;
+  --size-24: 24px;
+  --size-40: 40px;
+  --size-64: 64px;
+
+  /* Border radius */
+  --corner-none: 0px;
+  --corner-xs: 2px;
+  --corner-sm: 4px;
+  --corner-md: 6px;
+  --corner-lg: 8px;
+  --corner-xl: 12px;
+  --corner-2xl: 16px;
+  --corner-3xl: 24px;
+  --corner-full: 50%;
+
+  /* ---------------- SEMÁNTICOS ---------------- */
+  /* TEXT */
+  --color-text-black: var(--color-neutral-900);
+  --color-text-white: var(--color-neutral-50);
+  --color-text-purple: var(--color-purple-500);
+  --color-text-stock: var(--color-green-500);
+  --color-text-no-stock: var(--color-red-500);
+  --color-text-gray: var(--color-neutral-500);
+
+  /* BACKGROUND */
+  --color-bg-black: var(--color-neutral-900);
+  --color-bg-white: var(--color-neutral-50);
+  --color-bg-gray: var(--color-neutral-200);
+  --color-bg-purple: var(--color-purple-500);
+  --color-bg-light-purple: var(--color-purple-200);
+  --color-bg-light-gray: var(--color-neutral-100);
+  --color-bg-light-green: var(--color-green-50);
+
+  /* ICONS */
+  --color-icon-black: var(--color-neutral-900);
+  --color-icon-white: var(--color-neutral-50);
+  --color-icon-gray: var(--color-neutral-400);
+  --color-icon-warning: var(--color-yellow-400);
+  --color-icon-success: var(--color-green-400);
+
+  /* BORDERS */
+  --color-border-gray: var(--color-neutral-400);
+  --color-border-light-purple: var(--color-purple-100);
+  --color-border-error-red: var(--color-red-500);
+  --color-border-focus: var(--color-purple-400);
+  --color-border-focus-2: var(--color-purple-200);
+
+  /* STATUS & TAGS */
+  --color-tags-notifications: var(--color-red-700);
+  --color-status-active: var(--color-green-500);
+  --color-status-disconnected: var(--color-red-600);
+  --color-status-away: var(--color-yellow-400);
+
+  /* SIZING (semánticos) */
+  --size-icon-sm: var(--size-20);
+  --size-icon-base: var(--size-24);
+  --size-icon-lg: var(--size-40);
+  --size-img: var(--size-64);
+  --size-avatar-xs: var(--size-16);
+  --size-avatar-sm: var(--size-40);
+  --size-avatar-md: var(--size-64);
+
+  /*spacing*/
+  --padding-s: 1rem;
+  --marging-S: 2rem;
+  --marging-M: 4rem;
+  --marging-section-S: 6rem;
+  --marging-section-M: 8rem;
+  --marging-section-XL: 12rem;
+  --marging-section-XXL: 16rem;
+
+  /* BORDER RADIUS (semánticos) */
+  --radius-none: var(--corner-none);
+  --radius-sm: var(--corner-xs);
+  --radius: var(--corner-sm);
+  --radius-md: var(--corner-md);
+  --radius-lg: var(--corner-lg);
+  --radius-xl: var(--corner-xl);
+  --radius-2xl: var(--corner-2xl);
+  --radius-3xl: var(--corner-3xl);
+  --radius-full: var(--corner-full);
+
+  /* SHADOWS (semánticos → ligados a colores) */
+  --shadow-gray: var(--color-neutral-400);
+  --shadow-middle-gray: var(--color-neutral-300);
+  --shadow-purple: var(--color-purple-900);
+  --shadow-light-gray: var(--color-neutral-200);
+
+  /* FOCUS & ERROR STATES */
+  --shadow-input-focus-error: var(--color-red-200);
+  --shadow-input-focus-error-2: var(--color-red-400);
+  --shadow-input-focus: var(--color-purple-200);
+
+  /* ------------------------------- THEME: Tipography------------------------- */
+@theme {
+  --font-family-roboto: "Roboto", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-family-candara: "Candara", "Candara", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  /* Heading Display */
+  --heading-display-font-family: var(--font-family-candara);
+  --heading-display-font-size: 40px;
+  --heading-display-line-height: 44px;
+  --heading-display-font-weight: 700;
+
+  /* Heading 1 */
+  --heading-1-font-family: var(--font-family-candara);
+  --heading-1-font-size: 32px;
+  --heading-1-line-height: 35px;
+  --heading-1-font-weight: 700;
+
+  /* Heading 2 */
+  --heading-2-font-family: var(--font-family-candara);
+  --heading-2-font-size: 24px;
+  --heading-2-line-height: 30px;
+  --heading-2-font-weight: 700;
+
+  /* Body text*/
+  --body-font-family: var(--font-family-roboto);
+  --body-font-size: 16px;
+  --body-line-height: 18px;
+  --body-font-weight: 400;
+
+  /* Supporting text */
+  --supporting-font-family: var(--font-family-roboto);
+  --supporting-font-size: 14px;
+  --supporting-line-height: 20px;
+  --supporting-font-weight: 400;
+
+  /* Micro text */
+  --micro-font-family: var(--font-family-roboto);
+  --micro-font-size: 12px;
+  --micro-line-height: 16px;
+  --micro-font-weight: 400;
+  }
+}
+
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -11,6 +214,67 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- MOBILE overrides (≤639px) ---------- */
+@media (max-width: 639px) {
+  :root {
+        --heading-display-font-size: 32px;
+        --heading-display-line-height: 35px;
+
+        --heading-1-font-size: 24px;
+        --heading-1-line-height: 26px;
+
+        --heading-2-font-size: 20px;
+        --heading-2-line-height: 22px;
+
+        --body-line-height: 24px;
+        --supporting-line-height: 20px;
+        --micro-line-height: 16px;
+      }
+    }
+
+/* ---------- utilitary classes for typography ---------- */
+.headingDisplay {
+  font-family: var(--heading-display-font-family);
+  font-size: var(--heading-display-font-size);
+  line-height: var(--heading-display-line-height);
+  font-weight: var(--heading-display-font-weight);
+}
+
+.heading1 {
+  font-family: var(--heading-1-font-family);
+  font-size: var(--heading-1-font-size);
+  line-height: var(--heading-1-line-height);
+  font-weight: var(--heading-1-font-weight);
+}
+
+.heading2 {
+  font-family: var(--heading-2-font-family);
+  font-size: var(--heading-2-font-size);
+  line-height: var(--heading-2-line-height);
+  font-weight: var(--heading-2-font-weight);
+}
+
+.bodyText {
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size);
+  line-height: var(--body-line-height);
+  font-weight: var(--body-font-weight);
+}
+
+.supportingText {
+  font-family: var(--supporting-font-family);
+  font-size: var(--supporting-font-size);
+  line-height: var(--supporting-line-height);
+  font-weight: var(--supporting-font-weight);
+}
+
+.microText {
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-font-size);
+  line-height: var(--micro-line-height);
+  font-weight: var(--micro-font-weight);
 }
 
 a {

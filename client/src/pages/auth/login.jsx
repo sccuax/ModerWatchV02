@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { FootNavbar } from "../../assets/components/sideBarLeft/footNavbar";
 
 function Login() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ function Login() {
 
   return (
     <div>
+      <FootNavbar />
       <h1>Login</h1>
       <button onClick={handleLogin}>Iniciar sesión</button>
     </div>
