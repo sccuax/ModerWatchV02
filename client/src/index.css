@@ -159,7 +159,6 @@
   --shadow-input-focus: var(--color-purple-200);
 
   /* ------------------------------- THEME: Tipography------------------------- */
-@theme {
   --font-family-roboto: "Roboto", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-family-candara: "Candara", "Candara", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   /* Heading Display */
@@ -197,7 +196,6 @@
   --micro-font-size: 12px;
   --micro-line-height: 16px;
   --micro-font-weight: 400;
-  }
 }
 
 
