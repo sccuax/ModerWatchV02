@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { jwtDecode } from "jwt-decode";
 
 import Login from "./pages/Auth/Login";
-import UserDashboard from "./pages/Dashboard/UserDashboard";
-import AdminDashboard from "./pages/Dashboard/AdminDashboard";
+//import UserDashboard from "./pages/Dashboard/UserDashboard";
+//import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 
 // Importaciones para el modo desarrollo
 import { developmentConfig } from "./config/development";

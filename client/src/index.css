@@ -128,13 +128,13 @@
   --size-avatar-md: var(--size-64);
 
   /*spacing*/
-  --padding-s: 1rem;
-  --marging-S: 2rem;
-  --marging-M: 4rem;
-  --marging-section-S: 6rem;
-  --marging-section-M: 8rem;
-  --marging-section-XL: 12rem;
-  --marging-section-XXL: 16rem;
+  --padding-s: 0.25rem;
+  --marging-S: 0.5rem;
+  --marging-M: 1rem;
+  --marging-section-S: 1.5rem;
+  --marging-section-M: 2rem;
+  --marging-section-XL: 3rem;
+  --marging-section-XXL: 4rem;
 
   /* BORDER RADIUS (semánticos) */
   --radius-none: var(--corner-none);
@@ -190,6 +190,7 @@
   --supporting-font-size: 14px;
   --supporting-line-height: 20px;
   --supporting-font-weight: 400;
+  
 
   /* Micro text */
   --micro-font-family: var(--font-family-roboto);
@@ -213,6 +214,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 
 /* ---------- MOBILE overrides (≤639px) ---------- */
 @media (max-width: 639px) {

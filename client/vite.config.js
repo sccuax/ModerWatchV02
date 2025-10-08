@@ -8,9 +8,16 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    svgr(),  // 👈 para importar SVGs como componentes de React
+    svgr({
+      // Habilitar exportación nombrada "ReactComponent"
+      exportAsDefault: false,
+      svgrOptions: {
+        // Opciones de SVGR si las necesitas
+        icon: true,
+      },
+    }),
   ],
   server: {
-    port: 4000,   // 👈 puerto
+    port: 4000,
   },
 })

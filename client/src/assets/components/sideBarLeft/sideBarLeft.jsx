@@ -1,5 +1,6 @@
 import MenuItem from "./menuItem";
 import { useState } from "react";
+import logo from "../../images/logo/modernwatchlogo.png";
 
 // SidebarLeft con mejor gestión de estado y navegación
 export default function SideBarLeft({ 
@@ -60,15 +61,18 @@ export default function SideBarLeft({
     };
 
     return (
-        <aside className="flex flex-col justify-between h-screen bg-gray-900 text-white p-4 w-64 shadow-lg">
+        <aside className="flex flex-col justify-between h-screen bg-[var(--color-bg-light-gray)]
+            text-white w-64 shadow-lg px-[var(--marging-M)] py-[var(--marging-section-M)] border-r-[0.5px] border-[var(--color-border-gray)]">
             {/* Sección superior del menú */}
-            <div className="space-y-2">
+            <div className="inline-flex flex-col items-start gap-[var(--marging-section-XXL)] pt-[var(--padding-s)]">
                 {/* Logo o título de la aplicación (opcional) */}
-                <div className="mb-8 px-3">
-                    <h2 className="text-xl font-bold text-white">Modern Watch</h2>
+                <div className="inline-flex items-center gap-[var(--marging-S)] p-[var(--padding-s)]">
+                    <img className="w-[71px]" src={logo} alt="Modern Watch Logo" />
+                    <h2 className="headingDisplay text-[var(--color-text-black)]">ADMIN</h2>
                 </div>
                 
                 {/* Elementos principales del menú */}
+                <div className="flex gap-[var(--marging-M)] flex-col">
                 {menuItems.map((item) => (
                     <MenuItem
                         key={item.id}
@@ -77,11 +81,11 @@ export default function SideBarLeft({
                         isActive={activeItem === item.href}
                         onClick={() => handleMenuClick(item)}
                     />
-                ))}
+                ))}</div>
             </div>
 
             {/* Sección inferior del menú */}
-            <div className="space-y-2 border-t border-gray-700 pt-4">
+            <div className="inline-flex flex-col border-t items-start justify-end py-0 px-[var(--padding-s)] gap-[var(--marging-M)] border-gray-700 pt-4">
                 {bottomMenuItems.map((item) => (
                     <MenuItem
                         key={item.id}

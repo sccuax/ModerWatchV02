@@ -4,7 +4,7 @@ import Icon from "./icon";
 export default function MenuItem({ className="", icon, label, isActive, onClick, ...props }) {
     return ( 
         <div 
-        className={`w-36 flex items-center gap-padding-s ${isActive ? "active" : ""} ${className}`} 
+        className={` flex items-center gap-[var(--marging-M)] p-[var(--padding-s)] ${isActive ? "active" : ""} ${className}`} 
             onClick={onClick}
             role="button"
             tabIndex={0}
@@ -17,8 +17,8 @@ export default function MenuItem({ className="", icon, label, isActive, onClick,
             }}
             {...props}
         >
-            <Icon name={icon} className="absolute inset-0"/>
-            <span className="supportingText"> {label} </span>  
+            <Icon name={icon} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[var(--size-icon-base)] h-[var(--size-icon-base)]"/>
+            <span className="bodyText text-[var(--color-text-gray)]"> {label} </span>  
         </div>
     );
 }

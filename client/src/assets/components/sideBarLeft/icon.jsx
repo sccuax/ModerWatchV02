@@ -1,68 +1,73 @@
+// Importa los SVGs de a poco para encontrar el problemático
+// Descomenta línea por línea hasta encontrar cuál falla
 
-import { ReactComponent as Home } from '../../Images/icons/home.svg';
-import { ReactComponent as LogOut } from '../../Images/icons/logOut.svg';
-import { ReactComponent as Bell } from '../../Images/icons/Bell.svg';
-import { ReactComponent as Blank } from '../../Images/icons/Blank-file.svg';
-import { ReactComponent as Calendar } from '../../Images/icons/Calendar.svg';
-import { ReactComponent as ChooseDate } from '../../Images/icons/choose-date.svg';
-import { ReactComponent as Contact } from '../../Images/icons/Contact.svg';
-import { ReactComponent as Delete } from '../../Images/icons/Delete.svg';
-import { ReactComponent as Deny } from '../../Images/icons/Deny.svg';
-import { ReactComponent as Filter } from '../../Images/icons/Filter.svg';
-import { ReactComponent as HelpInfo } from '../../Images/icons/help-info.svg';
-import { ReactComponent as Login } from '../../Images/icons/Login.svg';
-import { ReactComponent as Message } from '../../Images/icons/message.svg';
-import { ReactComponent as Pencil } from '../../Images/icons/Pencil.svg';
-import { ReactComponent as Product } from '../../Images/icons/product.svg';
-import { ReactComponent as Search } from '../../Images/icons/Search.svg';
-import { ReactComponent as Show } from '../../Images/icons/Show.svg';
-import { ReactComponent as Submit } from '../../Images/icons/Submit.svg';
-import { ReactComponent as Supplier } from '../../Images/icons/supplier.svg';
-import { ReactComponent as Tutorial } from '../../Images/icons/Tutorial.svg';
-import { ReactComponent as Update } from '../../Images/icons/update.svg';
-import { ReactComponent as Verify } from '../../Images/icons/Verify.svg';
-import { ReactComponent as WarningMessage } from '../../Images/icons/Warning-message.svg';
-import { ReactComponent as Warning } from '../../Images/icons/warning.svg';
+import Home from '../../Images/icons/home.svg?react';
+    import LogOut from '../../Images/icons/logOut.svg?react';
+// import Bell from '../../Images/icons/Bell.svg?react';
+// import Blank from '../../Images/icons/Blank-file.svg?react';
+// import Calendar from '../../Images/icons/Calendar.svg?react';
+// import ChooseDate from '../../Images/icons/choose-date.svg?react';
+// import Contact from '../../Images/icons/Contact.svg?react';
+// import Delete from '../../Images/icons/Delete.svg?react';
+// import Deny from '../../Images/icons/Deny.svg?react';
+// import Filter from '../../Images/icons/Filter.svg?react';
+    import HelpInfo from '../../Images/icons/help-info.svg?react';
+// import Login from '../../Images/icons/Login.svg?react';
+// import Message from '../../Images/icons/message.svg?react';
+// import Pencil from '../../Images/icons/Pencil.svg?react';
+    import Product from '../../Images/icons/product.svg?react';
+// import Search from '../../Images/icons/Search.svg?react';
+// import Show from '../../Images/icons/Show.svg?react';
+// import Submit from '../../Images/icons/Submit.svg?react';
+    import Supplier from '../../Images/icons/supplier.svg?react';
+// import Tutorial from '../../Images/icons/Tutorial.svg?react';
+    import Update from '../../Images/icons/update.svg?react';
+// import Verify from '../../Images/icons/Verify.svg?react';
+// import WarningMessage from '../../Images/icons/Warning-message.svg?react';
+// import Warning from '../../Images/icons/warning.svg?react';
 
-//dictionary of icons
+// Dictionary of icons - comenta los que no estén importados arriba
 const icons = {
-    home: Home,
+  home: Home,
     logout: LogOut,
-    bell: Bell,
-    blank: Blank,
-    calendar: Calendar,
-    chooseDate: ChooseDate,
-    contact: Contact,
-    delete: Delete,
-    deny: Deny,
-    filter: Filter,
+  // bell: Bell,
+  // blank: Blank,
+  // calendar: Calendar,
+  // chooseDate: ChooseDate,
+  // contact: Contact,
+  // delete: Delete,
+  // deny: Deny,
+  // filter: Filter,
     helpInfo: HelpInfo,
-    login: Login,
-    message: Message,
-    pencil: Pencil,
+  // login: Login,
+  // message: Message,
+  // pencil: Pencil,
     product: Product,
-    search: Search,
-    show: Show,
-    submit: Submit,
+  // search: Search,
+  // show: Show,
+  // submit: Submit,
     supplier: Supplier,
-    tutorial: Tutorial,
+  // tutorial: Tutorial,
     update: Update,
-    verify: Verify,
-    warningMessage: WarningMessage,
-    warning: Warning,
+  // verify: Verify,
+  // warningMessage: WarningMessage,
+  // warning: Warning,
 };
 
-
-//dynamic icon component
+// Dynamic icon component
 export default function Icon({ name, className, ...props }) {
-    const IconComponent = icons[name];
+  const IconComponent = icons[name];
 
-        if (!IconComponent) {
-        console.warn(`Icono '${name}' no encontrado. Iconos disponibles: ${Object.keys(icons).join(', ')}`);
-        return null;
+  if (!IconComponent) {
+    console.warn(
+      `Icono '${name}' no encontrado. Iconos disponibles: ${Object.keys(icons).join(', ')}`
+    );
+    return null;
+  }
 
-    } // if icon does not exist, it won't render anything
-    return <div className='relative w-6 h-6'>
-            <IconComponent className={className} {...props}/>
-        </div>;
+  return (
+    <div className="relative w-6 h-6">
+      <IconComponent className={className} {...props} />
+    </div>
+  );
 }
