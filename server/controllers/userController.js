@@ -1,20 +1,20 @@
-const user = require("../models/User");
+const User = require("../models/User");
 
 // Get all users
 const getAllUsers = async (req, res) => {
-    try {
-        const users = await user.find();
-        res.json(users);
+try {
+    const users = await User.find(); 
+    res.json(users);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
     }
 };
 
 // Get user by ID
 const getUserById = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const user = await user.findById(userId);
+        const { id } = req.params;
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -23,13 +23,58 @@ const getUserById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+
+//create users
+
+const createUser = async (req, res) => {
+try {
+    const { name, surname, email, dateOfBirth, nationalId, password } = req.body;
+
+    // Validate if the required fields are present
+    if (!name || !surname || !email || !dateOfBirth || !nationalId || !password) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // Check if a user with the same email or document already exists
+    const existingUser = await User.findOne({
+        $or: [{ email }, { nationalId }]
+    });
+    if (existingUser) {
+        return res.status(409).json({ error: "User already exists with that email or document" });
+    }
+
+    // Create new user
+    const newUser = new User({
+        name,
+        surname,
+        email,
+        dateOfBirth,
+        nationalId,
+        password
+    });
+
+    // Save to the database
+    await newUser.save();
+
+    res.status(201).json({
+        message: "User created successfully",
+        user: newUser
+    });
+
+} catch (err) {
+    res.status(500).json({ error: err.message });
+    }
+};
+
+
 // Update user
 const updateUser = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const { id } = req.params;
         const updates = req.body;
         const options = { new: true }; // return the updated document
-        const updatedUser = await user.findByIdAndUpdate(userId, updates, options);
+        const updatedUser = await User.findByIdAndUpdate(id, updates, options);
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -41,8 +86,8 @@ const updateUser = async (req, res) => {
 // Delete user
 const deleteUser = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const deletedUser = await user.findByIdAndDelete(userId);
+        const { id } = req.params;
+        const deletedUser = await User.findByIdAndDelete(id);
         if (!deletedUser) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -52,4 +97,4 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = { getAllUsers, getUserById, updateUser, deleteUser };
+module.exports = { getAllUsers, getUserById, createUser, updateUser, deleteUser };
