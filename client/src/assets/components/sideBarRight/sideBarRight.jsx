@@ -19,9 +19,11 @@ export default function SideBarRight({ className = "",
 
     return (
         <aside className={`w-[300px] bg-[var(--color-bg-light-gray)] 
-                shadow-[ -2px_0_8px_rgba(0,0,0,0.05)] p-6 flex flex-col ${className}`} > 
+                shadow-[ -2px_0_8px_rgba(0,0,0,0.05)] p-6 flex flex-col pt-[var(--marging-section-XL)] 
+                px-0 pb-[50px] border-l-[0.5px] border-[var(--color-border-gray)] ${className}`} > 
 
-    <div>
+    <div className="relative flex flex-col items-center h-[206px] border-b-[0.5px]
+        border-[var(--color-border-gray)] w-full">
         {editButton.map((button) => (
             <TertiaryButton 
                 key={button.id} 
@@ -30,6 +32,7 @@ export default function SideBarRight({ className = "",
                 showIcon={button.showIcon} 
                 onClick={button.onClick} 
                 style={{ marginBottom: '16px' }} 
+                className="absolute top-0 right-3"
             />
         ))}
     </div>
