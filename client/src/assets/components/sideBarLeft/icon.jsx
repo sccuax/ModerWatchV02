@@ -10,7 +10,7 @@ import Home from '../../Images/icons/home.svg?react';
 // import Contact from '../../Images/icons/Contact.svg?react';
 // import Delete from '../../Images/icons/Delete.svg?react';
 // import Deny from '../../Images/icons/Deny.svg?react';
-// import Filter from '../../Images/icons/Filter.svg?react';
+    import Filter from '../../Images/icons/Filter.svg?react';
     import HelpInfo from '../../Images/icons/help-info.svg?react';
 // import Login from '../../Images/icons/Login.svg?react';
 // import Message from '../../Images/icons/message.svg?react';
@@ -37,7 +37,7 @@ const icons = {
   // contact: Contact,
   // delete: Delete,
   // deny: Deny,
-  // filter: Filter,
+    filter: Filter,
     helpInfo: HelpInfo,
   // login: Login,
   // message: Message,

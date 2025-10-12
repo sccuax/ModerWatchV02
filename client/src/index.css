@@ -148,7 +148,7 @@
   --radius-full: var(--corner-full);
 
   /* SHADOWS (semánticos → ligados a colores) */
-  --shadow-gray: var(--color-neutral-400);
+  --color-shadow-gray: var(--color-neutral-400);
   --shadow-middle-gray: var(--color-neutral-300);
   --shadow-purple: var(--color-purple-900);
   --shadow-light-gray: var(--color-neutral-200);
@@ -183,7 +183,7 @@
   --body-font-family: var(--font-family-roboto);
   --body-font-size: 16px;
   --body-line-height: 18px;
-  --body-font-weight: 400;
+  --body-font-weight: 500;
 
   /* Supporting text */
   --supporting-font-family: var(--font-family-roboto);
@@ -277,6 +277,19 @@
   font-weight: var(--micro-font-weight);
 }
 
+/*------------------------utilitary effcets------------------------*/
+.shadow-buttons-main{
+  box-shadow: -2px -3px 7px 1px var(--shadow-purple, #4C1D95) inset, 
+  2px 2px 8px 0 rgba(229, 231, 235, 0.60) inset, 
+  4px 4px 8px 0 var(--shadow-middle-gray, #D1D5DB);
+}
+
+.shadows-button-secondary{
+  box-shadow: -2px -3px 6px 0 var(--color-shadow-gray, #9CA3AF) inset, 
+  2px 2px 8px 0 rgba(229, 231, 235, 0.60) inset, 
+  4px 4px 6px 0 var(--shadow-light-gray, #E5E7EB);
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -300,13 +313,13 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
+  /* border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #1a1a1a; */
   cursor: pointer;
   transition: border-color 0.25s;
 }

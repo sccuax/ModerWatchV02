@@ -5,7 +5,7 @@ export default function TertiaryButton({
   iconName,
   text,
   iconProps = {},
-  showIcon = true,     // nueva prop para controlar visibilidad del icono
+  showIcon = true,     // new prop to shwow or hide icon
   onClick,
   style = {},
   ...props
@@ -33,7 +33,7 @@ export default function TertiaryButton({
           className="w-[var(--size-icon-base)] h-[var(--size-icon-base)]"
         />
       )}
-      <span className="bodyText text-[var(--color-text-black)]">
+      <span className="microText text-[var(--color-text-black)]">
         {text}
       </span>
     </button>

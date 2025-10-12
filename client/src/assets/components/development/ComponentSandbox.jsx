@@ -1,9 +1,10 @@
 import SideBarLeft from '../sideBarLeft/sideBarLeft';
 import SideBarRight from '../sideBarRight/sideBarRight';
+import MainContent from '../layout/mainContent';
 import { useState } from 'react';
 
 // Este es tu "laboratorio" para desarrollar componentes
-function ComponentSandbox({ activeComponent = 'sidebar' }) {
+function ComponentSandbox({ activeComponent = 'main-content' }) {
   const [currentPath, setCurrentPath] = useState('/dashboard');
 
   // Función de navegación para desarrollo - solo para testing
@@ -59,6 +60,25 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
           </div>
         );
 
+      case 'main-content':
+        return (
+          <div className="flex h-screen bg-gray-100">
+            <main className="flex-1 flex items-center justify-center w-full">
+              <MainContent showStats={true} statsData={[{ label: 'Usuarios', value: 120 }, { label: 'Ventas', value: 75 }]}>
+                <div className="bg-white p-6 rounded-lg shadow-md w-full">
+                  <h2 className="text-2xl font-bold mb-4 text-gray-800">
+                    🔧 Modo Desarrollo - Main Conten t
+                  </h2>
+                  <p className="text-gray-600">
+                    Aquí puedes probar el layout principal con estadísticas y
+                    contenido variable.
+                  </p>
+                </div>
+              </MainContent>
+            </main>
+          </div>
+        );
+
       case 'dashboard':
         return (
           <div className="flex h-screen">
@@ -94,6 +114,22 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
                       onNavigate={handleDevelopmentNavigation}
                       currentPath={currentPath}
                     />
+                  </div>
+                </div>
+
+                {/* main content preview*/}
+                <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <div className="p-4 bg-gray-50 border-b">
+                    <h3 className="font-semibold">Main Content</h3>
+                  </div>
+                  <div className="h-96 p-4">
+                    <MainContent showStats={true} statsData={[{ label: 'Usuarios', value: 120 }, { label: 'Ventas', value: 75 }]}>
+                      <div className="bg-white p-6 rounded-lg shadow-md w-full h-full flex items-center justify-center">
+                        <h2 className="text-2xl font-bold mb-4 text-gray-800">
+                          Contenido Variable
+                        </h2>
+                      </div>
+                    </MainContent>
                   </div>
                 </div>
 
