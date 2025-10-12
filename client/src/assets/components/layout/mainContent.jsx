@@ -1,10 +1,10 @@
 import PageHeader from './PageHeader';
-import StatsSection from './StatsSection';
+/*import StatsSection from './StatsSection'; */
 
 
 export default function MainContent({ 
-    showStats = false,
-    statsData = [],
+    /* showStats = false,
+    statsData = [], */
     children  // ← Aquí va la parte variable (table, form, etc)
 }) {
     return (
@@ -12,7 +12,7 @@ export default function MainContent({
     pt-[var(--marging-section-M)]">
             <PageHeader userName="Jonathan" />
             
-            {showStats && <StatsSection data={statsData} />}
+            {/* {showStats && <StatsSection data={statsData} />} */}
             
             <div className="content-body">
                 {children}  {/* ← Aquí cambias table o form según la página */}

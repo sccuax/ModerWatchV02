@@ -3,7 +3,7 @@
 
 import Home from '../../Images/icons/home.svg?react';
     import LogOut from '../../Images/icons/logOut.svg?react';
-// import Bell from '../../Images/icons/Bell.svg?react';
+    import Bell from '../../Images/icons/Bell.svg?react';
 // import Blank from '../../Images/icons/Blank-file.svg?react';
 // import Calendar from '../../Images/icons/Calendar.svg?react';
 // import ChooseDate from '../../Images/icons/choose-date.svg?react';
@@ -13,7 +13,7 @@ import Home from '../../Images/icons/home.svg?react';
     import Filter from '../../Images/icons/Filter.svg?react';
     import HelpInfo from '../../Images/icons/help-info.svg?react';
 // import Login from '../../Images/icons/Login.svg?react';
-// import Message from '../../Images/icons/message.svg?react';
+    import Message from '../../Images/icons/message.svg?react';
 // import Pencil from '../../Images/icons/Pencil.svg?react';
     import Product from '../../Images/icons/product.svg?react';
 // import Search from '../../Images/icons/Search.svg?react';
@@ -30,7 +30,7 @@ import Home from '../../Images/icons/home.svg?react';
 const icons = {
   home: Home,
     logout: LogOut,
-  // bell: Bell,
+    bell: Bell,
   // blank: Blank,
   // calendar: Calendar,
   // chooseDate: ChooseDate,
@@ -40,7 +40,7 @@ const icons = {
     filter: Filter,
     helpInfo: HelpInfo,
   // login: Login,
-  // message: Message,
+    message: Message,
   // pencil: Pencil,
     product: Product,
   // search: Search,

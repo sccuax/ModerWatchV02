@@ -4,7 +4,7 @@ import MainContent from '../layout/mainContent';
 import { useState } from 'react';
 
 // Este es tu "laboratorio" para desarrollar componentes
-function ComponentSandbox({ activeComponent = 'main-content' }) {
+function ComponentSandbox({ activeComponent = 'sidebar' }) {
   const [currentPath, setCurrentPath] = useState('/dashboard');
 
   // Función de navegación para desarrollo - solo para testing
@@ -64,16 +64,7 @@ function ComponentSandbox({ activeComponent = 'main-content' }) {
         return (
           <div className="flex h-screen bg-gray-100">
             <main className="flex-1 flex items-center justify-center w-full">
-              <MainContent showStats={true} statsData={[{ label: 'Usuarios', value: 120 }, { label: 'Ventas', value: 75 }]}>
-                <div className="bg-white p-6 rounded-lg shadow-md w-full">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-800">
-                    🔧 Modo Desarrollo - Main Conten t
-                  </h2>
-                  <p className="text-gray-600">
-                    Aquí puedes probar el layout principal con estadísticas y
-                    contenido variable.
-                  </p>
-                </div>
+              <MainContent >
               </MainContent>
             </main>
           </div>
