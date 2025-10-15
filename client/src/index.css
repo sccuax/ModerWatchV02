@@ -291,9 +291,11 @@
 }
 
 .box-shadow-button-header{
- box-shadow: 1px 1px 8px 0 var(--shadow-light-gray, #E5E7EB) inset, 
- 1px 1px 4px 0 var(--color-shadow-gray, #9CA3AF);
+  box-shadow: 1px 1px 8px 0 var(--shadow-light-gray, #E5E7EB) inset, 
+  1px 1px 4px 0 var(--color-shadow-gray, #9CA3AF);
 }
+
+
 
 a {
   font-weight: 500;

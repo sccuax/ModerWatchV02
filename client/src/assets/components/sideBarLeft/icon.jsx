@@ -5,7 +5,7 @@ import Home from '../../Images/icons/home.svg?react';
     import LogOut from '../../Images/icons/logOut.svg?react';
     import Bell from '../../Images/icons/Bell.svg?react';
 // import Blank from '../../Images/icons/Blank-file.svg?react';
-// import Calendar from '../../Images/icons/Calendar.svg?react';
+    import Calendar from '../../Images/icons/Calendar.svg?react';
 // import ChooseDate from '../../Images/icons/choose-date.svg?react';
 // import Contact from '../../Images/icons/Contact.svg?react';
 // import Delete from '../../Images/icons/Delete.svg?react';
@@ -28,11 +28,12 @@ import Home from '../../Images/icons/home.svg?react';
 
 // Dictionary of icons - comenta los que no estén importados arriba
 const icons = {
-  home: Home,
+    
+    home: Home,
     logout: LogOut,
     bell: Bell,
   // blank: Blank,
-  // calendar: Calendar,
+    calendar: Calendar,
   // chooseDate: ChooseDate,
   // contact: Contact,
   // delete: Delete,
