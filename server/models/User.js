@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     dateOfBirth: { type: Date, required: true },
     nationalId: { type: String, required: true, unique: true }, // Nacional identification
+    message: { type: String, required: false },
     password: { type: String, required: true }
 }, { timestamps: true });
 

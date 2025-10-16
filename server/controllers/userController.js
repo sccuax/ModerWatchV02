@@ -3,8 +3,22 @@ const User = require("../models/User");
 // Get all users
 const getAllUsers = async (req, res) => {
 try {
+    const { search } = req.query;
+
+    const query = {};
+    if (search) {
+        query.$or = [
+            { name: { $regex: search, $options: "i" } },
+            { surname: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } },
+            { nationalId: { $regex: search, $options: "i" } },
+            { message: { $regex: search, $options: "i" } }
+        ];
+    }
+
     const users = await User.find(); 
     res.json(users);
+
     } catch (err) {
     res.status(500).json({ error: err.message });
     }
@@ -24,12 +38,12 @@ const getUserById = async (req, res) => {
     }
 };
 
-
+message
 //create users
 
 const createUser = async (req, res) => {
 try {
-    const { name, surname, email, dateOfBirth, nationalId, password } = req.body;
+    const { name, surname, email, dateOfBirth, nationalId, message, password } = req.body;
 
     // Validate if the required fields are present
     if (!name || !surname || !email || !dateOfBirth || !nationalId || !password) {
@@ -51,6 +65,7 @@ try {
         email,
         dateOfBirth,
         nationalId,
+        message,
         password
     });
 
