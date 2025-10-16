@@ -8,6 +8,7 @@ export default function TertiaryButton({
   showIcon = true,     // new prop to shwow or hide icon
   onClick,
   style = {},
+  textClass = "microText",
   ...props
 }) {
   return (
@@ -21,7 +22,7 @@ export default function TertiaryButton({
         border: "0.5px solid var(--color-border-gray)",
         borderRadius: "4px",
         background: "#fff",
-        boxShadow: "2px 2px 4px 0 var(--shadow-middle-gray, #D1D5DB) inset, 2px 2px 6px 0 var(--shadow-gray, #9CA3AF)",
+        boxShadow: "2px 2px 4px 0 var(--shadow-middle-gray, #D1D5DB) inset, 2px 2px 6px 0 var(--color-shadow-gray, #9CA3AF)",
         ...style,
       }}
       {...props}
@@ -33,7 +34,7 @@ export default function TertiaryButton({
           className="w-[var(--size-icon-base)] h-[var(--size-icon-base)]"
         />
       )}
-      <span className="microText text-[var(--color-text-black)]">
+  <span className={`text-[var(--color-text-black)] ${textClass}`}>
         {text}
       </span>
     </button>

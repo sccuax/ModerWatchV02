@@ -8,21 +8,21 @@ import Home from '../../Images/icons/home.svg?react';
     import Calendar from '../../Images/icons/Calendar.svg?react';
 // import ChooseDate from '../../Images/icons/choose-date.svg?react';
 // import Contact from '../../Images/icons/Contact.svg?react';
-// import Delete from '../../Images/icons/Delete.svg?react';
-// import Deny from '../../Images/icons/Deny.svg?react';
+    import Delete from '../../Images/icons/Delete.svg?react';
+    import Deny from '../../Images/icons/Deny.svg?react';
     import Filter from '../../Images/icons/Filter.svg?react';
     import HelpInfo from '../../Images/icons/help-info.svg?react';
 // import Login from '../../Images/icons/Login.svg?react';
     import Message from '../../Images/icons/message.svg?react';
-// import Pencil from '../../Images/icons/Pencil.svg?react';
+    import Pencil from '../../Images/icons/Pencil.svg?react';
     import Product from '../../Images/icons/product.svg?react';
-// import Search from '../../Images/icons/Search.svg?react';
+    import Search from '../../Images/icons/Search.svg?react';
 // import Show from '../../Images/icons/Show.svg?react';
 // import Submit from '../../Images/icons/Submit.svg?react';
     import Supplier from '../../Images/icons/supplier.svg?react';
 // import Tutorial from '../../Images/icons/Tutorial.svg?react';
     import Update from '../../Images/icons/update.svg?react';
-// import Verify from '../../Images/icons/Verify.svg?react';
+    import Verify from '../../Images/icons/Verify.svg?react';
 // import WarningMessage from '../../Images/icons/Warning-message.svg?react';
 // import Warning from '../../Images/icons/warning.svg?react';
 
@@ -36,21 +36,21 @@ const icons = {
     calendar: Calendar,
   // chooseDate: ChooseDate,
   // contact: Contact,
-  // delete: Delete,
-  // deny: Deny,
+    delete: Delete,
+    deny: Deny,
     filter: Filter,
     helpInfo: HelpInfo,
   // login: Login,
     message: Message,
-  // pencil: Pencil,
+    pencil: Pencil,
     product: Product,
-  // search: Search,
+    search: Search,
   // show: Show,
   // submit: Submit,
     supplier: Supplier,
   // tutorial: Tutorial,
     update: Update,
-  // verify: Verify,
+    verify: Verify,
   // warningMessage: WarningMessage,
   // warning: Warning,
 };

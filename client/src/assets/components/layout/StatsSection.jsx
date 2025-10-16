@@ -8,7 +8,7 @@ const imageStats = {
     staff: StaffImage,
 };
 
-export function StatCard({ type, className, text, data, ...props }) {
+export function StatCard({ type, className, text, data, colorClass, ...props }) {
     const imageSrc = imageStats[type];
 
     return (
@@ -22,29 +22,34 @@ export function StatCard({ type, className, text, data, ...props }) {
             )}
             <div className='flex flex-col w-auto h-full gap-[var(--marging-S)] justify-center'>
                 <p className='heading2 text-[var(--color-text-black)]'>{text}</p>
-                <p className='heading2 text-[var(--color-text-black)]'>{data}</p>
+                <p className={`leading-[23px] font-black text-[20px] tracking-[1px] ${colorClass}`}>
+                    {data}
+                </p>
             </div>
         </div>
     );
 }
 
 export default function StatsSection({ statsData, className, ...props }) {
-    // Si no se pasan datos, usar los datos por defecto
     const defaultStats = [
         { 
             type: 'staff', 
             text: 'Staff',
-            data: '8'
+            data: '8',
+            colorClass: 'text-[var(--color-text-purple)]'
         },
         { 
             type: 'orders', 
             text: 'Orders',
-            data: '202'
+            data: '202',
+            colorClass: 'text-[var(--color-text-stock)]'
         },
         { 
             type: 'cancellations',
             text: 'Cancel',
-            data: '152'
+            data: '152',
+            colorClass: 'text-[var(--color-text-no-stock)]',
+            className: 'justify-end'
         }
     ];
 
@@ -52,7 +57,7 @@ export default function StatsSection({ statsData, className, ...props }) {
 
     return (
         <section
-            className={`w-full h-[127px] bg-[var(--color-white)] 
+            className={`w-full h-[127px] 
             rounded-[var(--radius-md)] box-shadow-section p-[var(--padding-m)] 
             flex items-center gap-[var(--marging-L)] justify-between ${className || ''}`}
             {...props}
@@ -63,6 +68,8 @@ export default function StatsSection({ statsData, className, ...props }) {
                     type={stat.type}
                     text={stat.text}
                     data={stat.data}
+                    colorClass={stat.colorClass}
+                    className={stat.className}
                 />
             ))}
         </section>
