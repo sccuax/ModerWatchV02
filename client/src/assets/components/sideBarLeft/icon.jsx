@@ -4,7 +4,7 @@
 import Home from '../../Images/icons/home.svg?react';
     import LogOut from '../../Images/icons/logOut.svg?react';
     import Bell from '../../Images/icons/Bell.svg?react';
-// import Blank from '../../Images/icons/Blank-file.svg?react';
+    import Blank from '../../Images/icons/Blank-file.svg?react';
     import Calendar from '../../Images/icons/Calendar.svg?react';
 // import ChooseDate from '../../Images/icons/choose-date.svg?react';
 // import Contact from '../../Images/icons/Contact.svg?react';
@@ -12,7 +12,7 @@ import Home from '../../Images/icons/home.svg?react';
     import Deny from '../../Images/icons/Deny.svg?react';
     import Filter from '../../Images/icons/Filter.svg?react';
     import HelpInfo from '../../Images/icons/help-info.svg?react';
-// import Login from '../../Images/icons/Login.svg?react';
+    import Login from '../../Images/icons/Login.svg?react';
     import Message from '../../Images/icons/message.svg?react';
     import Pencil from '../../Images/icons/Pencil.svg?react';
     import Product from '../../Images/icons/product.svg?react';
@@ -32,7 +32,7 @@ const icons = {
     home: Home,
     logout: LogOut,
     bell: Bell,
-  // blank: Blank,
+    blank: Blank,
     calendar: Calendar,
   // chooseDate: ChooseDate,
   // contact: Contact,
@@ -40,7 +40,7 @@ const icons = {
     deny: Deny,
     filter: Filter,
     helpInfo: HelpInfo,
-  // login: Login,
+    login: Login,
     message: Message,
     pencil: Pencil,
     product: Product,
@@ -67,7 +67,7 @@ export default function Icon({ name, className, ...props }) {
   }
 
   return (
-    <div className="relative w-6 h-6">
+    <div className="relative w-auto h-auto">
       <IconComponent className={className} {...props} />
     </div>
   );

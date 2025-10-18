@@ -1,9 +1,8 @@
 import PageHeader from './PageHeader';
 import StatsSection from './StatsSection';
-import ShowRequester from './showRequester';
 
 
-export default function MainContent({ children }) { 
+export default function MainContent({ children, showSection = true, }) { 
 
     /* showStats = false,
     statsData = [], */
@@ -21,14 +20,15 @@ export default function MainContent({ children }) {
             {/* ----------------showing stats section----------------- */}
             
             <StatsSection 
+            showSection={showSection}
     statsData={[
         { type: 'staff', text: 'Staff', data: '8', colorClass: 'text-[var(--color-text-purple)]' },
         { type: 'orders', text: 'Orders', data: '200', colorClass: 'text-[var(--color-text-stock)]' },
         { type: 'cancellations', text: 'Cancel', data: '23', colorClass: 'text-[var(--color-text-no-stock)]', className: 'justify-end' }
     ]}
 />
-            <div className="content-body w-full h-auto">
-                <ShowRequester onFilterClick={() => console.log('Filter button clicked')} />
+            <div className="content-body w-full h-auto ">
+
                 {children}  
                 {/* ← here is the content to change from table to form */}
             </div>

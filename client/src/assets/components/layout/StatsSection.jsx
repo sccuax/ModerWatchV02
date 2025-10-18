@@ -30,7 +30,7 @@ export function StatCard({ type, className, text, data, colorClass, ...props }) 
     );
 }
 
-export default function StatsSection({ statsData, className, ...props }) {
+export default function StatsSection({ statsData, className, showSection = true, ...props }) {
     const defaultStats = [
         { 
             type: 'staff', 
@@ -54,6 +54,7 @@ export default function StatsSection({ statsData, className, ...props }) {
     ];
 
     const stats = statsData || defaultStats;
+    //const section = showSection {true};
 
     return (
         <section
@@ -62,16 +63,19 @@ export default function StatsSection({ statsData, className, ...props }) {
             flex items-center gap-[var(--marging-L)] justify-between ${className || ''}`}
             {...props}
         >
-            {stats.map((stat, index) => (
-                <StatCard
-                    key={index}
-                    type={stat.type}
-                    text={stat.text}
-                    data={stat.data}
-                    colorClass={stat.colorClass}
-                    className={stat.className}
-                />
-            ))}
+{showSection && (
+    stats.map((stat, index) => (
+        <StatCard
+            key={index}
+            type={stat.type}
+            text={stat.text}
+            data={stat.data}
+            colorClass={stat.colorClass}
+            className={stat.className}
+        />
+    ))
+)}
+            
         </section>
     );
 }

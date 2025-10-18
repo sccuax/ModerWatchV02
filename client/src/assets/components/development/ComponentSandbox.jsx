@@ -1,7 +1,10 @@
 import SideBarLeft from '../sideBarLeft/sideBarLeft';
 import SideBarRight from '../sideBarRight/sideBarRight';
 import MainContent from '../layout/mainContent';
+import AdminDashboard  from '../../../pages/Dashboard/AdminDashboard';  
+import Forms from '../forms/forms'
 import { useState } from 'react';
+import ShowRequester from '../layout/showRequester';
 
 // Este es tu "laboratorio" para desarrollar componentes
 function ComponentSandbox({ activeComponent = 'sidebar' }) {
@@ -12,6 +15,7 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
     console.log('🔧 MODO DESARROLLO - Navegación simulada:', { path, item });
     setCurrentPath(path);
   };
+
 
   // Diferentes vistas según el componente que estés desarrollando
   const renderComponent = () => {
@@ -64,7 +68,8 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
         return (
           <div className="flex h-screen bg-gray-100">
             <main className="flex-1 flex items-center justify-center w-full">
-              <MainContent >
+              <MainContent>
+                <ShowRequester></ShowRequester>
               </MainContent>
             </main>
           </div>
@@ -85,6 +90,27 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
             </div>
           </div>
         );
+
+        case 'admin-dashboard':
+  return (
+    <div className="h-screen w-full">
+      <AdminDashboard />
+    </div>
+  );
+
+  // Here we're going to prove forms
+      case 'forms':
+        return (
+        <div className="flex h-screen bg-gray-100">
+            <main className="flex-1 flex items-center justify-center w-full">
+                <MainContent showSection={false}>  {/* ← Cambia a true/false según necesites */}
+                    <Forms
+                    
+                    />
+                </MainContent>
+            </main>
+        </div>
+    );
 
       case 'components-showcase':
         return (

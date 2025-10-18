@@ -8,20 +8,19 @@ try {
     const query = {};
     if (search) {
         query.$or = [
-            { name: { $regex: search, $options: "i" } },
-            { surname: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-            { nationalId: { $regex: search, $options: "i" } },
-            { message: { $regex: search, $options: "i" } }
-        ];
+        { name: { $regex: search, $options: "i" } },
+        { surname: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { nationalId: { $regex: search, $options: "i" } },
+        { message: { $regex: search, $options: "i" } },
+    ];
     }
 
-    const users = await User.find(); 
+    const users = await User.find(query);
     res.json(users);
-
-    } catch (err) {
+} catch (err) {
     res.status(500).json({ error: err.message });
-    }
+}
 };
 
 // Get user by ID
@@ -37,8 +36,6 @@ const getUserById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-
-message
 //create users
 
 const createUser = async (req, res) => {

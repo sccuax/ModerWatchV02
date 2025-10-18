@@ -4,6 +4,8 @@ import logo from "../../images/logo/modernwatchlogo.png";
 
 // SidebarLeft con mejor gestión de estado y navegación
 export default function SideBarLeft({ 
+    mainBottomMenu,
+    mainMenu,
     onNavigate,     // Función callback para manejar navegación
     currentPath = "/" // Ruta actual para determinar qué item está activo
 }) {
@@ -54,6 +56,8 @@ export default function SideBarLeft({
         }
     ];
 
+    const menu = mainMenu || menuItems;
+    const bottomMenu = mainBottomMenu || bottomMenuItems;
     // Función para manejar clicks en elementos del menú
     const handleMenuClick = (item) => {
         setActiveItem(item.href);
@@ -73,7 +77,7 @@ export default function SideBarLeft({
                 
                 {/* Elementos principales del menú */}
                 <div className="flex gap-[var(--marging-M)] flex-col">
-                {menuItems.map((item) => (
+                {menu.map((item) => (
                     <MenuItem
                         key={item.id}
                         label={item.label}
@@ -86,7 +90,7 @@ export default function SideBarLeft({
 
             {/* Sección inferior del menú */}
             <div className="inline-flex flex-col border-t items-start justify-end py-0 px-[var(--padding-s)] gap-[var(--marging-M)] border-gray-700 pt-4">
-                {bottomMenuItems.map((item) => (
+                {bottomMenu.map((item) => (
                     <MenuItem
                         key={item.id}
                         label={item.label}
