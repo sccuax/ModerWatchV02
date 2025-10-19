@@ -6,7 +6,7 @@ import Home from '../../Images/icons/home.svg?react';
     import Bell from '../../Images/icons/Bell.svg?react';
     import Blank from '../../Images/icons/Blank-file.svg?react';
     import Calendar from '../../Images/icons/Calendar.svg?react';
-// import ChooseDate from '../../Images/icons/choose-date.svg?react';
+    import ChooseDate from '../../Images/icons/choose-date.svg?react';
 // import Contact from '../../Images/icons/Contact.svg?react';
     import Delete from '../../Images/icons/Delete.svg?react';
     import Deny from '../../Images/icons/Deny.svg?react';
@@ -18,7 +18,7 @@ import Home from '../../Images/icons/home.svg?react';
     import Product from '../../Images/icons/product.svg?react';
     import Search from '../../Images/icons/Search.svg?react';
 // import Show from '../../Images/icons/Show.svg?react';
-// import Submit from '../../Images/icons/Submit.svg?react';
+    import Submit from '../../Images/icons/Submit.svg?react';
     import Supplier from '../../Images/icons/supplier.svg?react';
 // import Tutorial from '../../Images/icons/Tutorial.svg?react';
     import Update from '../../Images/icons/update.svg?react';
@@ -34,7 +34,7 @@ const icons = {
     bell: Bell,
     blank: Blank,
     calendar: Calendar,
-  // chooseDate: ChooseDate,
+    chooseDate: ChooseDate,
   // contact: Contact,
     delete: Delete,
     deny: Deny,
@@ -46,7 +46,7 @@ const icons = {
     product: Product,
     search: Search,
   // show: Show,
-  // submit: Submit,
+    submit: Submit,
     supplier: Supplier,
   // tutorial: Tutorial,
     update: Update,

@@ -22,6 +22,12 @@ export default function Forms(){
     [&::-webkit-calendar-picker-indicator]:hue-rotate-[180deg] p-0!`
         }
     ],
+    [
+        { id: 5, type: "text", label: "ID", placeHolder: "Enter your ID" },
+        { id: 6, type: "password", label: "Password", placeHolder: "Enter your password" },
+        { id: 7, type: "submit", label: "", placeHolder: "", className:"w-max h-auto", classNameInput: `cursor-pointer w-[var(--size-icon-lg)] 
+            h-[var(--size-icon-lg)] p-0! bg-[var(--color-icon-success)]`, value:""}
+    ],
         ]
 
     return (
