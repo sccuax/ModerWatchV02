@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import Icon from '../sideBarLeft/icon';
 
-export default function Input({ type, label, value, onChange, className = "", classNameInput = "", placeHolder, ...props }) {
+export default function Input({ type, label, value, name, onChange, className = "", classNameInput = "", placeHolder, ...props }) {
     const [selectedDate, setSelectedDate] = useState('');
     const dateInputRef = useRef(null);
 
@@ -15,7 +15,8 @@ export default function Input({ type, label, value, onChange, className = "", cl
     // Input tipo date
     if (type === 'date') {
         return (
-            <div className={`flex flex-col h-auto gap-[var(--marging-M)] pt-[var(--marging-section-M)] ${className}`}>
+            
+            <div className={`flex flex-row items-end h-auto gap-[var(--marging-M)] pt-[var(--marging-section-M)] ${className}`}>
                 <label className="bodyText w-max text-[var(--color-text-black)] whitespace-nowrap" htmlFor={label}>
                     {label}
                 </label>
@@ -24,8 +25,12 @@ export default function Input({ type, label, value, onChange, className = "", cl
                         ref={dateInputRef}
                         type="date"
                         id={label}
+                        name={name || label}
                         value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
+                        onChange={(e) => {
+                            setSelectedDate(e.target.value)
+                            if (onChange) onChange(e);
+                        }}
                         className={`absolute inset-0 w-full h-full cursor-pointer opacity-0 z-10 ${classNameInput}`}
                         {...props}
                     />
@@ -77,6 +82,7 @@ export default function Input({ type, label, value, onChange, className = "", cl
             <input 
                 required
                 value={value}
+                name={name || label}
                 onChange={onChange}  // Agregado para controlar el input
                 className={`h-[40px] text-[var(--color-text-black)] py-[10px] px-[var(--marging-section-M)]
                 border-[0.5px] rounded-[var(--radius-lg)] border-[var(--color-border-gray)] text-center

@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const navigate = useNavigate();
+/*   const navigate = useNavigate();
 
   const handleLogin = async () => {
     const res = await fetch("http://localhost:4000/api/auth/login", {
@@ -18,13 +18,15 @@ function Login() {
       const decoded = JSON.parse(atob(data.token.split(".")[1]));
       navigate(decoded.role === "admin" ? "/dashboard/admin" : "/dashboard/user");
     }
-  };
+  }; */
 
   return (
-    <div>
+    <main>
+          <div>
       <h1 className="heading1">Login</h1>
-      <button onClick={handleLogin}>Iniciar sesión</button>
+      {/* <button onClick={handleLogin}>Iniciar sesión</button> */}
     </div>
+    </main>
   );
 }
 

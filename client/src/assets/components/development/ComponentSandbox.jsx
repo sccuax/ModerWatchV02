@@ -2,6 +2,7 @@ import SideBarLeft from '../sideBarLeft/sideBarLeft';
 import SideBarRight from '../sideBarRight/sideBarRight';
 import MainContent from '../layout/mainContent';
 import AdminDashboard  from '../../../pages/Dashboard/AdminDashboard';  
+import Login from '../../../pages/auth/login'
 import Forms from '../forms/forms'
 import { useState } from 'react';
 import ShowRequester from '../layout/showRequester';
@@ -98,6 +99,13 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
     </div>
   );
 
+      case 'login':
+        return (
+          <div className="h-screen w-full">
+            <Login/>
+          </div>
+        );
+
   // Here we're going to prove forms
       case 'forms':
         return (
@@ -105,7 +113,8 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
             <main className="flex-1 flex items-center justify-center w-full">
                 <MainContent showSection={false}>  {/* ← Cambia a true/false según necesites */}
                     <Forms
-                    
+                      mode="create"
+                      onSubmitUrl="http://localhost:3000/api/users"
                     />
                 </MainContent>
             </main>
