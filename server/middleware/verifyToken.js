@@ -7,7 +7,7 @@ function verifyToken(req, res, next) {
     if (!token) return res.status(403).json({ error: "Token required" });
 
     try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.user = decoded; // añade {id, role} al request
     next();
     } catch (err) {

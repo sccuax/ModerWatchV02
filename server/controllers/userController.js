@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const User = require("../models/User");
 
 // Get all users
@@ -36,11 +37,49 @@ const getUserById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// ============================================
+// 🆕 FUNCIÓN ADICIONAL: Get users by status
+// ============================================
+// Esta función te permite obtener todos los usuarios filtrados por status
+// Útil si quieres agregar pestañas o filtros en tu frontend
+const getUsersByStatus = async (req, res) => {
+    try {
+        const { status } = req.params;
+        
+        // Valida que el status sea válido
+        const validStatuses = ['pending', 'approved', 'rejected'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ 
+                error: `Status inválido. Debe ser uno de: ${validStatuses.join(', ')}` 
+            });
+        }
+        
+        // Busca todos los usuarios con ese status
+        const users = await User.find({ status: status })
+            .sort({ createdAt: -1 }); // Ordena por más recientes primero
+        
+        res.json({
+            count: users.length,
+            status: status,
+            users: users
+        });
+        
+    } catch (err) {
+        console.error('Error obteniendo usuarios por status:', err);
+        res.status(500).json({ 
+            error: 'Error interno del servidor',
+            details: err.message 
+        });
+    }
+};
+
+
 //create users
 
 const createUser = async (req, res) => {
 try {
-    const { name, surname, email, dateOfBirth, nationalId, message, password } = req.body;
+    const { name, surname, email, dateOfBirth, nationalId, message, password, status } = req.body;
 
     // Validate if the required fields are present
     if (!name || !surname || !email || !dateOfBirth || !nationalId || !password) {
@@ -63,7 +102,8 @@ try {
         dateOfBirth,
         nationalId,
         message,
-        password
+        password,
+        status
     });
 
     // Save to the database
@@ -82,19 +122,124 @@ try {
 
 // Update user
 const updateUser = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const updates = req.body;
-        const options = { new: true }; // return the updated document
-        const updatedUser = await User.findByIdAndUpdate(id, updates, options);
-        if (!updatedUser) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        res.json(updatedUser);
+try {
+    const { id } = req.params;
+    const updates = req.body;
+    
+    // Si se está actualizando la contraseña, hashearla
+    if (updates.password) {
+        const salt = await bcrypt.genSalt(10);
+        updates.password = await bcrypt.hash(updates.password, salt);
+    }
+    
+    const options = { new: true };
+    const updatedUser = await User.findByIdAndUpdate(id, updates, options);
+    
+    if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+    }
+    
+    res.json(updatedUser);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
+
+// ============================================
+// 🆕 NUEVA FUNCIÓN: Update user status
+// ============================================
+// Esta función está específicamente dedicada a actualizar el status de un usuario
+// Separamos esta lógica del updateUser genérico para tener mejor control
+const updateUserStatus = async (req, res) => {
+    try {
+        const { id } = req.params; // ID del usuario a actualizar
+        const { status } = req.body; // Nuevo status
+        
+        // VALIDACIÓN 1: Verifica que se envió un status
+        if (!status) {
+            return res.status(400).json({ 
+                error: 'El campo status es requerido' 
+            });
+        }
+        
+        // VALIDACIÓN 2: Verifica que el status sea uno de los valores permitidos
+        const validStatuses = ['pending', 'approved', 'rejected'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ 
+                error: `Status inválido. Debe ser uno de: ${validStatuses.join(', ')}` 
+            });
+        }
+        
+        // VALIDACIÓN 3: Verifica que el ID sea válido (formato de ObjectId de MongoDB)
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ 
+                error: 'ID de usuario inválido' 
+            });
+        }
+        
+        // Busca y actualiza el usuario
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { status: status },
+            { 
+                new: true, // Retorna el documento actualizado
+                runValidators: true // Ejecuta las validaciones del schema
+            }
+        );
+        
+        // Si no encuentra el usuario, retorna error 404
+        if (!updatedUser) {
+            return res.status(404).json({ 
+                error: 'Usuario no encontrado' 
+            });
+        }
+        
+        // Log para auditoría (opcional pero recomendado)
+        console.log(`✅ Status actualizado: Usuario ${id} (${updatedUser.email}) cambió a '${status}'`);
+        
+        // OPCIONAL: Aquí podrías agregar lógica adicional según el status
+        // Por ejemplo, enviar un email de notificación al usuario
+        /*
+        if (status === 'approved') {
+            await sendApprovalEmail(updatedUser.email, updatedUser.name);
+            console.log(`📧 Email de aprobación enviado a ${updatedUser.email}`);
+        } else if (status === 'rejected') {
+            await sendRejectionEmail(updatedUser.email, updatedUser.name);
+            console.log(`📧 Email de rechazo enviado a ${updatedUser.email}`);
+        }
+        */
+        
+        // Retorna el usuario actualizado
+        res.json({
+            message: 'Status actualizado exitosamente',
+            user: updatedUser
+        });
+        
+    } catch (err) {
+        console.error('❌ Error actualizando status del usuario:', err);
+        
+        // Manejo de errores específicos
+        if (err.name === 'CastError') {
+            return res.status(400).json({ 
+                error: 'Formato de ID inválido' 
+            });
+        }
+        
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ 
+                error: 'Error de validación',
+                details: err.message 
+            });
+        }
+        
+        // Error genérico
+        res.status(500).json({ 
+            error: 'Error interno del servidor',
+            details: err.message 
+        });
+    }
+};
+
 // Delete user
 const deleteUser = async (req, res) => {
     try {
@@ -109,4 +254,4 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = { getAllUsers, getUserById, createUser, updateUser, deleteUser };
+module.exports = { getAllUsers, getUserById, createUser, updateUser, deleteUser, updateUserStatus, getUsersByStatus };
