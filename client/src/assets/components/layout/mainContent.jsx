@@ -8,7 +8,7 @@ export default function MainContent({ children, showSection = true, }) {
     statsData = [], */
     // children  // ← Aquí va la parte variable (table, form, etc)
     return (
-    <main className="flex flex-col w-[749px] h-full gap-[var(--marging-section-S)] px-[var(--marging-M)]
+    <main className="flex flex-col overflow-hidden w-[749px] h-full gap-[var(--marging-section-S)] px-[var(--marging-M)]
     pt-[var(--marging-section-M)]">
         {/* --------Header, waving and notifications--------- */}
             <PageHeader 

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import Filter from "../buttons/tertiary.jsx";
 import Loop from "../sideBarLeft/icon.jsx";
 import Icon from "../sideBarLeft/icon.jsx";
+import { useUserStatus } from "../../../hooks/useUserStatus.js";
 
 /* -------- subcommponent row -------- */
 export function RequesterContent({ tittle, dataRequester, ...props }) {
@@ -18,13 +19,52 @@ export function RequesterContent({ tittle, dataRequester, ...props }) {
 }
 
 /* -------- table that shows all request to get access -------- */
-export function RequesterBlock({ requesters = [], onDelete, ...props }) {
+export function RequesterBlock({
+    requesters = [],
+    onDelete,
+    onApprove,     // ✅ Agregado
+    onReject,      // ✅ Agregado
+    isUpdating,    // ✅ Agregado
+    ...props
+}) {
     if (!requesters.length)
         return (
             <p className="bodyText text-[var(--color-text-gray)] px-[var(--marging-M)]">
                 No se encontraron usuarios.
             </p>
         );
+
+    // Helper para obtener el badge de status
+    const getStatusBadge = (status) => {
+        const statusConfig = {
+            pending: {
+                text: 'Pending',
+                textColor: 'text-yellow-600',
+                bgColor: 'bg-[var(--color-baadge--pending)]',
+                borderColor: 'border-yellow-300',
+            },
+            approved: {
+                text: 'Approved',
+                bgColor: 'bg-green-100',
+                textColor: 'text-green-800',
+                borderColor: 'border-green-300'
+            },
+            rejected: {
+                text: 'Rejected',
+                bgColor: 'bg-red-100',
+                textColor: 'text-red-800',
+                borderColor: 'border-red-300'
+            }
+        };
+
+        const config = statusConfig[status] || statusConfig.pending;
+
+        return (
+            <span className={`px-2 py-1 rounded microText border ${config.bgColor} ${config.textColor} ${config.borderColor}`}>
+                {config.text}
+            </span>
+        );
+    };
 
     return (
         <div className="">
@@ -48,16 +88,47 @@ export function RequesterBlock({ requesters = [], onDelete, ...props }) {
                             tittle="Message:"
                             dataRequester={r.message ?? ""}
                         />
+
+                        {/* ✅ Mostrar el status actual del usuario */}
+                        <div className="flex flex-row gap-[var(--marging-M)]">
+                            <p className="bodyText w-[80px] text-[var(--color-text-black)]">
+                                Status:
+                            </p>
+                            {getStatusBadge(r.status)}
+                        </div>
                     </div>
 
                     <div className="flex flex-row px-[var(--marging-M)] w-[268px] gap-[var(--marging-section-S)] items-end justify-end">
-                        <Icon name="verify" className="w-6 h-6 cursor-pointer" />
-                        <Icon name="deny" className="w-6 h-6 cursor-pointer" />
-                        <Icon name="pencil" className="w-6 h-6 cursor-pointer" />
-                        <Icon 
-                            onClick={() => onDelete(r._id)} 
-                            name="delete" 
-                            className="w-6 h-6 cursor-pointer" 
+                        {/* ✅ CORREGIDO: Icono de Aprobar - ahora con onClick */}
+                        {r.status !== 'approved' && (
+                            <Icon
+                                onClick={() => onApprove(r._id)}
+                                name="verify"
+                                className={`w-6 h-6 ${isUpdating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-110 transition-transform'}`}
+                                title="Aprobar usuario"
+                            />
+                        )}
+
+                        {/* ✅ CORREGIDO: Icono de Rechazar - ahora con onClick */}
+                        {r.status !== 'rejected' && (
+                            <Icon
+                                onClick={() => onReject(r._id)}
+                                name="deny"
+                                className={`w-6 h-6 ${isUpdating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-110 transition-transform'}`}
+                                title="Rechazar usuario"
+                            />
+                        )}
+
+                        <Icon
+                            name="pencil"
+                            className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
+                            title="Editar usuario"
+                        />
+                        <Icon
+                            onClick={() => onDelete(r._id)}
+                            name="delete"
+                            className={`w-6 h-6 ${isUpdating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-110 transition-transform'}`}
+                            title="Eliminar usuario"
                         />
                     </div>
                 </div>
@@ -95,16 +166,74 @@ export default function ShowRequester() {
     const [requesters, setRequesters] = useState([]);
     const [filteredRequesters, setFilteredRequesters] = useState([]);
     const [filtersVisible, setFiltersVisible] = useState(false);
-    const [loading, setLoading] = useState(false); // ✅ Agregado
+    const [loading, setLoading] = useState(false);
 
-    // ✅ Función para eliminar dentro del componente
-    const deleteRequester = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this requester?")) {
+    // Usa el hook personalizado para manejar cambios de status
+    const {
+        isUpdating,
+        error: statusError,
+        success: statusSuccess,
+        approveUser,
+        rejectUser, 
+        clearMessages
+    } = useUserStatus();
+
+    // ✅ AGREGADO: Función para aprobar un usuario
+    const handleApproveUser = async (userId) => {
+        if (!window.confirm("Are you sure you want to approve this user?")) {
             return;
         }
-        
+
+        try {
+            const updatedUser = await approveUser(userId);
+
+            // Actualiza el estado local con el usuario modificado
+            setRequesters((prev) =>
+                prev.map((r) => (r._id === userId ? updatedUser.user : r))
+            );
+            setFilteredRequesters((prev) =>
+                prev.map((r) => (r._id === userId ? updatedUser.user : r))
+            );
+
+            alert("User approved correctly");
+        } catch (err) {
+            console.error("Error aprobando usuario:", err);
+            alert("Error al aprobar usuario: " + (err.message || 'Error desconocido'));
+        }
+    };
+
+    // ✅ AGREGADO: Función para rechazar un usuario
+    const handleRejectUser = async (userId) => {
+        if (!window.confirm("Are you sure you want to reject this request?")) {
+            return;
+        }
+
+        try {
+            const updatedUser = await rejectUser(userId);
+
+            // Actualiza el estado local con el usuario modificado
+            setRequesters((prev) =>
+                prev.map((r) => (r._id === userId ? updatedUser.user : r))
+            );
+            setFilteredRequesters((prev) =>
+                prev.map((r) => (r._id === userId ? updatedUser.user : r))
+            );
+
+            alert("Request rejected successfully");
+        } catch (err) {
+            console.error("Error rechazando usuario:", err);
+            alert("Error al rechazar usuario: " + (err.message || 'Error desconocido'));
+        }
+    };
+
+    // Función para eliminar dentro del componente
+    const deleteRequester = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this user?")) {
+            return;
+        }
+
         setLoading(true);
-        
+
         try {
             const res = await fetch(`http://localhost:3000/api/users/userId/${id}`, {
                 method: "DELETE",
@@ -112,25 +241,25 @@ export default function ShowRequester() {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             if (res.ok) {
                 // Actualizar ambos estados
                 setRequesters((prev) => prev.filter((r) => r._id !== id));
                 setFilteredRequesters((prev) => prev.filter((r) => r._id !== id));
-                alert("Requester deleted successfully");
+                alert("Usuario eliminado exitosamente");
             } else {
                 const errorData = await res.json();
-                alert("Error deleting requester: " + errorData.error);
+                alert("Error al eliminar usuario: " + errorData.error);
             }
         } catch (err) {
-            console.error("Error deleting requester:", err);
-            alert("Error deleting requester: " + err.message);
+            console.error("Error eliminando usuario:", err);
+            alert("Error al eliminar usuario: " + err.message);
         } finally {
             setLoading(false);
         }
     };
 
-    // ✅ fetchRequesters con useCallback
+    // fetchRequesters con useCallback
     const fetchRequesters = useCallback(async () => {
         try {
             const res = await fetch("http://localhost:3000/api/users");
@@ -145,12 +274,12 @@ export default function ShowRequester() {
         }
     }, []);
 
-    // ✅ Carga inicial
+    // Carga inicial
     useEffect(() => {
         fetchRequesters();
     }, [fetchRequesters]);
 
-    // ✅ Filtrado local sin parpadeos
+    // Filtrado local sin parpadeos
     useEffect(() => {
         if (!search.trim()) {
             setFilteredRequesters(requesters);
@@ -167,7 +296,7 @@ export default function ShowRequester() {
         }
     }, [search, requesters]);
 
-    // ✅ Botón Filters (muestra/oculta panel)
+    // Botón Filters (muestra/oculta panel)
     const handleFilterClick = () => {
         setFiltersVisible((prev) => !prev);
     };
@@ -183,6 +312,16 @@ export default function ShowRequester() {
         },
     ];
 
+    useEffect (() => {
+        if (statusError || statusSuccess){
+            const timer = setTimeout (() => {
+                clearMessages();
+            }, 3000)
+
+            return () => clearTimeout(timer);
+        }
+    }, [statusSuccess, statusError, clearMessages]);
+
     return (
         <section className="w-full flex flex-col pt-[var(--marging-section-XL)] border-t-[0.5px] border-[var(--color-border-gray)] gap-[var(--marging-section-S)]">
             {/* Header: search + filters */}
@@ -192,6 +331,20 @@ export default function ShowRequester() {
                     <Filter key={button.id} {...button} />
                 ))}
             </div>
+
+            {/* ✅ AGREGADO: Mensaje de error del cambio de status */}
+            {statusError && (
+                <div className="p-3 rounded-lg bg-red-50 border border-red-300">
+                    <p className="microText text-red-800">❌ {statusError}</p>
+                </div>
+            )}
+
+            {/* ✅ AGREGADO: Mensaje de éxito del cambio de status */}
+            {statusSuccess && (
+                <div className="p-3 rounded-lg bg-green-50 border border-green-300">
+                    <p className="microText text-green-800">✅ Status updated correctly</p>
+                </div>
+            )}
 
             {/* Panel de filtros opcional */}
             {filtersVisible && (
@@ -204,16 +357,23 @@ export default function ShowRequester() {
 
             {/* Bloque principal */}
             <div className="w-full h-[420px] overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden flex flex-col">
-                <RequesterBlock 
-                    requesters={filteredRequesters} 
+                <RequesterBlock
+                    requesters={filteredRequesters}
                     onDelete={deleteRequester}
+                    onApprove={handleApproveUser}    // ✅ AGREGADO
+                    onReject={handleRejectUser}      // ✅ AGREGADO
+                    isUpdating={isUpdating || loading} // ✅ AGREGADO
                 />
             </div>
 
-            {/* Indicador de carga opcional */}
-            {loading && (
-                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                    <p className="text-white text-lg">Eliminando...</p>
+            {/* Indicador de carga */}
+            {(loading || isUpdating) && (
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-xl">
+                        <p className="text-gray-800 text-lg">
+                            {loading ? 'Eliminando...' : 'Actualizando status...'}
+                        </p>
+                    </div>
                 </div>
             )}
         </section>

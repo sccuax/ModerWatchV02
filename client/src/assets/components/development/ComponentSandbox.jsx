@@ -1,4 +1,6 @@
 import SideBarLeft from '../sideBarLeft/sideBarLeft';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import SideBarRight from '../sideBarRight/sideBarRight';
 import MainContent from '../layout/mainContent';
 import AdminDashboard  from '../../../pages/Dashboard/AdminDashboard';  
@@ -102,7 +104,13 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
       case 'login':
         return (
           <div className="h-screen w-full">
-            <Login/>
+                <BrowserRouter>
+<Routes>
+  <Route path="/" element={<Navigate to="/login" />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/admin-dashboard" element={<AdminDashboard />} />
+</Routes>
+    </BrowserRouter>
           </div>
         );
 
@@ -193,7 +201,7 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
       </div>
 
       {/* Contenido principal con padding para el banner */}
-      <div className="pt-10">{renderComponent()}</div>
+      <div className="pt-10 w-full">{renderComponent()}</div>
     </>
   );
 }

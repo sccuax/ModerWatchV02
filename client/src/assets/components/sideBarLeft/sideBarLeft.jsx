@@ -1,5 +1,6 @@
 import MenuItem from "./menuItem";
 import { useState } from "react";
+import { useLogOut } from '../../../hooks/logOutUser'
 import logo from "../../images/logo/modernwatchlogo.png";
 
 // SidebarLeft con mejor gestión de estado y navegación
@@ -11,6 +12,9 @@ export default function SideBarLeft({
 }) {
     // Estado local para manejar qué elemento del menú está activo
     const [activeItem, setActiveItem] = useState(currentPath);
+
+    const { handleLogout } = useLogOut
+    ();
 
     // Configuración de los elementos del menú
     // Esta estructura te permite agregar o quitar elementos fácilmente
@@ -52,7 +56,8 @@ export default function SideBarLeft({
             id: 'logout',
             label: 'Log Out',
             icon: 'logout',
-            href: '/logout'
+            href: '',
+            onClick: handleLogout
         }
     ];
 
@@ -96,7 +101,7 @@ export default function SideBarLeft({
                         label={item.label}
                         icon={item.icon}
                         isActive={activeItem === item.href}
-                        onClick={() => handleMenuClick(item)}
+                        onClick={item.onClick ? item.onClick : () => handleMenuClick(item)}
                     />
                 ))}
             </div>
