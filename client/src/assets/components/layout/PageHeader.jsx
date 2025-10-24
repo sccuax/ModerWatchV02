@@ -1,8 +1,13 @@
 import HeaderButton from "../buttons/headerButton";
-import Icon from "../sideBarLeft/icon"
+import Icon from "../sideBarLeft/icon";
 import Badge from "../buttons/badge";
+import NotificationDropdown from "../notifications/NotificationDropdown";
 
-export default function PageHeader({ userName = "Usuario", messageCoun = 0, notificationCount = 0 }) {
+export default function PageHeader({ 
+    userName = "Usuario",
+    buttons = [],  // ← CAMBIO: Recibir array de botones
+    onCloseDropdown
+}) {
 
     const getCurrentDate = () => {
         const date = new Date();
@@ -12,19 +17,6 @@ export default function PageHeader({ userName = "Usuario", messageCoun = 0, noti
             year: 'numeric'
         }).format(date);
     };
-    
-    const iconButton = [
-        {
-            id: 'messages',
-            icon: 'message',
-            count: messageCoun  // Count específico para mensajes
-        },
-        {
-            id: 'notification',
-            icon: 'bell',
-            count: notificationCount  // Count específico para notificaciones
-        }
-    ]
     
     return (
         <header className="flex items-start justify-between w-full border-b-[0.5px] pb-[54px]
@@ -39,12 +31,28 @@ export default function PageHeader({ userName = "Usuario", messageCoun = 0, noti
             
             {/* -- buttons container -- */}
             <div className="flex flex-row gap-[var(--marging-M)]">
-                {iconButton.map((button) => (
+                {buttons.map((button) => (
                     <div key={button.id} className="relative">
-                        <HeaderButton icon={button.icon} />
+                        <HeaderButton 
+                            onClick={button.onClick}
+                            icon={button.icon} 
+                            isActive={button.isActive}
+                        />
                         <Badge count={button.count} />
+
+                        {/* Mostrar dropdown si existe configuración */}
+                        {button.dropdown && (
+                            <NotificationDropdown
+                                messages={button.dropdown.messages}  // ← CAMBIO: usar messages del dropdown
+                                isOpen={button.isActive}  // ← CAMBIO: usar isActive del botón
+                                onClose={onCloseDropdown}
+                                title={button.dropdown.title}
+                                emptyMessage={button.dropdown.emptyMessage}
+                            />
+                        )}
                     </div>
                 ))}
+                
                 {/*------------Calendar--------- */}
                 <div className="px-[var(--marging-S))] pointer-events-none box-shadow-button-header bg-[var(--color-white)] flex flex-row gap-[var(--marging-S)] 
                 items-center justify-center rounded-tl-[var(--radius-sm)] rounded-br-[var(--radius-sm)]

@@ -1,6 +1,6 @@
 import Icon from '../sideBarLeft/icon.jsx';
 
-export default function HeaderButton({ icon, ...props }) {
+export default function HeaderButton({ icon, onClick, ...props }) {
     const styles = {
         borderTop: "0.3px solid var(--color-border-gray, #9CA3AF)",
         borderLeft: "0.3px solid var(--color-border-gray, #9CA3AF)",
@@ -9,7 +9,8 @@ export default function HeaderButton({ icon, ...props }) {
     };
 
     return (
-    <button className={`box-shadow-button-header w-[48.37px] h-[40px] rounded-tl-[var(--radius-sm)] rounded-br-[var(--radius-sm)]
+    <button onClick={onClick}
+    className={`box-shadow-button-header w-[48.37px] h-[40px] rounded-tl-[var(--radius-sm)] rounded-br-[var(--radius-sm)]
     rounded-tr-[var(--radius-md)] rounded-bl-[var(--radius-md)] bg-[var(--color-white)]
     px-[var(--marging-S)] py-[var(--padding-s)] flex items-center justify-center 
     ${styles}`}>

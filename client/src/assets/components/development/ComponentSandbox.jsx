@@ -5,6 +5,7 @@ import SideBarRight from '../sideBarRight/sideBarRight';
 import MainContent from '../layout/mainContent';
 import AdminDashboard  from '../../../pages/Dashboard/AdminDashboard';  
 import Login from '../../../pages/auth/login'
+import SignUp from '../../../pages/auth/SignUp'
 import Forms from '../forms/forms'
 import { useState } from 'react';
 import ShowRequester from '../layout/showRequester';
@@ -101,6 +102,7 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
     </div>
   );
 
+  // here we have a functional login component
       case 'login':
         return (
           <div className="h-screen w-full">
@@ -113,6 +115,19 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
     </BrowserRouter>
           </div>
         );
+
+        //here we have the sigup page
+case 'signup':
+  return (
+    <div className="h-screen w-full">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/signup" />} />
+          <Route path="/signup" element={<SignUp />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 
   // Here we're going to prove forms
       case 'forms':
