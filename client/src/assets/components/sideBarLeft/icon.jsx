@@ -7,7 +7,7 @@ import Bell from '../../Images/icons/Bell.svg?react';
 import Blank from '../../Images/icons/Blank-file.svg?react';
 import Calendar from '../../Images/icons/Calendar.svg?react';
 import ChooseDate from '../../Images/icons/choose-date.svg?react';
-// import Contact from '../../Images/icons/Contact.svg?react';
+import Contact from '../../Images/icons/Contact.svg?react';
 import Delete from '../../Images/icons/Delete.svg?react';
 import Deny from '../../Images/icons/Deny.svg?react';
 import Filter from '../../Images/icons/Filter.svg?react';
@@ -20,7 +20,7 @@ import Search from '../../Images/icons/Search.svg?react';
 // import Show from '../../Images/icons/Show.svg?react';
 import Submit from '../../Images/icons/Submit.svg?react';
 import Supplier from '../../Images/icons/supplier.svg?react';
-// import Tutorial from '../../Images/icons/Tutorial.svg?react';
+import Tutorial from '../../Images/icons/Tutorial.svg?react';
 import Update from '../../Images/icons/update.svg?react';
 import Verify from '../../Images/icons/Verify.svg?react';
 // import WarningMessage from '../../Images/icons/Warning-message.svg?react';
@@ -36,7 +36,7 @@ const icons = {
   blank: Blank,
   calendar: Calendar,
   chooseDate: ChooseDate,
-  // contact: Contact,
+  contact: Contact,
   delete: Delete,
   deny: Deny,
   filter: Filter,
@@ -49,7 +49,7 @@ const icons = {
   // show: Show,
   submit: Submit,
   supplier: Supplier,
-  // tutorial: Tutorial,
+  tutorial: Tutorial,
   update: Update,
   verify: Verify,
   // warningMessage: WarningMessage,

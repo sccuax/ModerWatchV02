@@ -17,7 +17,7 @@ export default function SignUp() {
             }),
             id: Date.now() + Math.random()
         };
-        
+
         setNotifications(prev => [newNotification, ...prev]);
     };
 
@@ -43,16 +43,46 @@ export default function SignUp() {
 
     return (
         <div className='w-screen h-screen flex flex-row gap-[var(--marging-section-XXL)] bg-[var(--color-bg-white)]'>
-            <SideBarLeft/>
-            <MainContent 
+            <SideBarLeft
+                mainMenu={[
+                    {
+                        id: 'help',
+                        label: 'Log in',
+                        icon: 'login',
+                        href: '/login'
+                    },
+                    {
+                        id: 'contact',
+                        label: 'contact',
+                        icon: 'contact'
+                    }
+                ]}
+
+                mainBottomMenu={[
+                    {
+                        id: 'help',
+                        label: 'Help & Information',
+                        icon: 'helpInfo',
+                        href: '/help'
+                    },
+                    {
+                        id: 'tutorial',
+                        label: 'tutorial',
+                        icon: 'tutorial',
+                        href: ''
+                    },
+
+                ]}
+            />
+            <MainContent
                 showSection={false}
                 userName='Welcome to MW'
                 buttons={buttonsConfig}  // ← CAMBIO: pasar buttonsConfig
                 onCloseDropdown={() => setOpenDropdown(null)}
             >
                 <Forms onNotification={handleNotification}
-                onSubmitUrl={"http://localhost:3000/api/users"} 
-                mode='create'/>
+                    onSubmitUrl={"http://localhost:3000/api/users"}
+                    mode='create' />
             </MainContent>
         </div>
     );
