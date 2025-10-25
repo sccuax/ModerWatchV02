@@ -1,9 +1,8 @@
 import SideBarLeft from '../sideBarLeft/sideBarLeft';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SideBarRight from '../sideBarRight/sideBarRight';
 import MainContent from '../layout/mainContent';
-import AdminDashboard  from '../../../pages/Dashboard/AdminDashboard';  
+import AdminDashboard from '../../../pages/Dashboard/AdminDashboard';
 import Login from '../../../pages/auth/login'
 import SignUp from '../../../pages/auth/SignUp'
 import Forms from '../forms/forms'
@@ -95,54 +94,51 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
           </div>
         );
 
-        case 'admin-dashboard':
-  return (
-    <div className="h-screen w-full">
-      <AdminDashboard />
-    </div>
-  );
-
-  // here we have a functional login component
-      case 'login':
+      case 'admin-dashboard':
         return (
           <div className="h-screen w-full">
-                <BrowserRouter>
-<Routes>
-  <Route path="/" element={<Navigate to="/login" />} />
-  <Route path="/login" element={<Login />} />
-  <Route path="/admin-dashboard" element={<AdminDashboard />} />
-</Routes>
-    </BrowserRouter>
+            <AdminDashboard />
           </div>
         );
 
-        //here we have the sigup page
-case 'signup':
-  return (
-    <div className="h-screen w-full">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/signup" />} />
-          <Route path="/signup" element={<SignUp />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+      // here we have a functional login component
+      case 'login':
+        return (
+          <div className="h-screen w-full">
+            <Routes>
+              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              <Route path="/signup" element={<SignUp />} />
+            </Routes>
+          </div>
+        );
 
-  // Here we're going to prove forms
+      //here we have the signup page
+      case 'signup':
+        return (
+          <div className="h-screen w-full">
+            <Routes>
+              <Route path="/" element={<Navigate to="/signup" />} />
+              <Route path="/signup" element={<SignUp />} />
+            </Routes>
+          </div>
+        );
+
+      // Here we're going to prove forms
       case 'forms':
         return (
-        <div className="flex h-screen bg-gray-100">
+          <div className="flex h-screen bg-gray-100">
             <main className="flex-1 flex items-center justify-center w-full">
-                <MainContent showSection={false}>  {/* ← Cambia a true/false según necesites */}
-                    <Forms
-                      mode="create"
-                      onSubmitUrl="http://localhost:3000/api/users"
-                    />
-                </MainContent>
+              <MainContent showSection={false}>  {/* ← Cambia a true/false según necesites */}
+                <Forms
+                  mode="create"
+                  onSubmitUrl="http://localhost:3000/api/users"
+                />
+              </MainContent>
             </main>
-        </div>
-    );
+          </div>
+        );
 
       case 'components-showcase':
         return (

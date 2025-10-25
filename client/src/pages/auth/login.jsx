@@ -1,4 +1,5 @@
 // import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom'; 
 import Bg from '../../assets/Images/login/ImageToStl.com_backgroundLogin.avif'
 import LoginLogo from '../../assets/Images/login/logo-Isotopo.avif'
 import googleIcon from '../../assets/Images/login/googleIcon.avif'
@@ -18,6 +19,11 @@ function Login() {
     handleLogin,
     validateFields,
   } = useLogin();
+
+const handleGoogleLogin = () => {
+    // Ahora apunta a la ruta que INICIA el flujo de Auth0
+    window.location.href = "http://localhost:3000/api/auth/google/login"; 
+};
 
   // Función para manejar el Enter en los inputs
   const handleKeyPress = (e) => {
@@ -152,7 +158,7 @@ function Login() {
 
             <button
               type="button"
-              onClick={handleLogin} // Llama a la función de login del hook
+              onClick={handleGoogleLogin } // Llama a la función de login del hook
               disabled={isLoading} // Deshabilita el botón mientras está cargando
               className="supportingText felx items-center justify-center inline-flex w-full text-[var(--color-text-black)] py-[17px] px-[12px] rounded-[50px]
                disabled:opacity-50 disabled:cursor-not-allowed bg-white gap-[var(--marging-S)] border-[1px] border-[var(--color-border-gray)]"
@@ -170,7 +176,9 @@ function Login() {
           <p className='bodyText text-[var(--color-text-black)]'>
             Don’t have an account?
           </p>
-          <a href="" className='bodyText text-[var(--color-text-purple)] hover:underline'>Sign up</a>
+          <Link to="/signUp" className='bodyText text-[var(--color-text-purple)] hover:underline'>
+          Sign up
+          </Link>
         </div>
       </div>
     </main>

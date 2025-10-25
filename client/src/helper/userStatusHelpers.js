@@ -18,6 +18,12 @@ export const updateUserStatus = async (userId, newStatus) => {
         throw new Error(`Status inválido. Debe ser: ${validStatuses.join(', ')}`);
     }
 
+    // Obtener el token del localStorage (sistema híbrido)
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+
+    if (!token) {
+        throw new Error('No estás autenticado. Por favor inicia sesión nuevamente.');
+    }
     try {
         const response = await fetch(
             `http://localhost:3000/api/users/${userId}/status`,
@@ -25,6 +31,7 @@ export const updateUserStatus = async (userId, newStatus) => {
                 method: 'PATCH', // Usamos PATCH porque solo actualizamos un campo
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ status: newStatus }),
             }
