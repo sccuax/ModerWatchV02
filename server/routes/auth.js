@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { login } = require("../controllers/authController");
-const { auth } = require('express-openid-connect');
+//const { auth } = require('express-openid-connect');
 
 // endpoint for logging in
 router.post("/login", login);
-// Ruta GET (login con Auth0 - Google, etc.)
+/* // Ruta GET (login con Auth0 - Google, etc.)
 router.get("/login", (req, res) => {
   // Redirige a Auth0
   res.redirect("https://dev-sena.us.auth0.com/authorize?" + 
@@ -17,6 +17,6 @@ router.get("/login", (req, res) => {
       audience: "https://dev-sena.us.auth0.com/"
     })
   );
-});
+}); */
 
 module.exports = router;

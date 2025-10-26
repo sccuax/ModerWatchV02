@@ -6,7 +6,7 @@ import googleIcon from '../../assets/Images/login/googleIcon.avif'
 import { useLogin } from '../../hooks/useLogin';
 import { AlertCircle, CheckCircle } from 'lucide-react';
 
-function Login() {
+function Login( { setUser } ) {
   const {
     email,
     password,
@@ -18,7 +18,7 @@ function Login() {
     fieldErrors,
     handleLogin,
     validateFields,
-  } = useLogin();
+  } = useLogin(setUser);
 
 const handleGoogleLogin = () => {
     // Ahora apunta a la ruta que INICIA el flujo de Auth0
@@ -71,7 +71,7 @@ const handleGoogleLogin = () => {
                 onChange={(e) => setEmail(e.target.value)} // Correcto: actualiza username
                 onBlur={validateFields} // Valida cuando el usuario sale del campo
                 onKeyPress={handleKeyPress} // Permite enviar con Enter
-                className={`block supportingText w-full p-[var(--marging-M)] bg-white rounded-[var(--radius-xl)] focus:ring-2 focus:ring-blue-500 focus:border-transparent ${fieldErrors.email ? 'border-red-500' : 'border-gray-300'
+                className={`block supportingText text-[var(--color-text-black)] w-full p-[var(--marging-M)] bg-white rounded-[var(--radius-xl)] focus:ring-2 focus:ring-blue-500 focus:border-transparent ${fieldErrors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
                 placeholder="Enter your email address"
                 disabled={isLoading}
@@ -95,7 +95,7 @@ const handleGoogleLogin = () => {
                 onChange={(e) => setPassword(e.target.value)} // CORREGIDO: era setUsername, debe ser setPassword
                 onBlur={validateFields} // Valida cuando el usuario sale del campo
                 onKeyPress={handleKeyPress} // Permite enviar con Enter
-                className={`block supportingText w-full p-[var(--marging-M)] bg-white rounded-[var(--radius-xl)] focus:ring-2 focus:ring-blue-500 focus:border-transparent ${fieldErrors.password ? 'border-red-500' : 'border-gray-300'
+                className={`block supportingText text-[var(--color-text-black)] w-full p-[var(--marging-M)] bg-white rounded-[var(--radius-xl)] focus:ring-2 focus:ring-blue-500 focus:border-transparent ${fieldErrors.password ? 'border-red-500' : 'border-gray-300'
                   }`}
                 placeholder="Enter your password"
                 disabled={isLoading}
@@ -176,7 +176,7 @@ const handleGoogleLogin = () => {
           <p className='bodyText text-[var(--color-text-black)]'>
             Don’t have an account?
           </p>
-          <Link to="/signUp" className='bodyText text-[var(--color-text-purple)] hover:underline'>
+          <Link to="/SignUp" className='bodyText text-[var(--color-text-purple)] hover:underline'>
           Sign up
           </Link>
         </div>

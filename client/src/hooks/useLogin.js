@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
+import { jwtDecode } from "jwt-decode";
+
 import {
     validateLoginForm,
     loginRequest,
@@ -12,7 +14,7 @@ import {
  * Este hook encapsula el estado y las operaciones relacionadas
  * con el proceso de autenticación
  */
-export const useLogin = () => {
+export const useLogin = (setUser) => {
     const navigate = useNavigate();
     // Estados para manejar los datos del formulario
     const [email, setEmail] = useState('');
@@ -62,7 +64,12 @@ export const useLogin = () => {
             // PASO 4: Si fue exitoso, guarda el token usando el helper
             if (response.token) {
                 saveAuthToken(response.token);
-                navigate("/admin-dashboard");
+                const decoded = jwtDecode(response.token);
+                setUser(decoded);
+                // Espera a que React actualice el estado antes de navegar
+                setTimeout(() => {
+                    navigate("/dashboard/admin");
+                }, 100);
             }
 
             // PASO 5: Marca el login como exitoso

@@ -40,7 +40,7 @@ export const loginRequest = async (email, password) => {
         });
 
         const data = await response.json();
-
+        
         if (!response.ok) {
             throw new Error(data.message || 'Error en el login');
         }
@@ -67,7 +67,7 @@ export const saveAuthToken = (token) => {
     // Nota: En artifacts de Claude no funciona localStorage
     // Aquí solo mostramos cómo se haría en un proyecto real
     if (typeof window !== 'undefined' && window.localStorage) {
-        localStorage.setItem('authToken', token);
+        localStorage.setItem('token', token);
     }
 };
 
@@ -76,7 +76,7 @@ export const saveAuthToken = (token) => {
  */
 export const getAuthToken = () => {
     if (typeof window !== 'undefined' && window.localStorage) {
-        return localStorage.getItem('authToken');
+        return localStorage.getItem('token');
     }
     return null;
 };
@@ -86,6 +86,7 @@ export const getAuthToken = () => {
  */
 export const removeAuthToken = () => {
     if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem('token');
         localStorage.removeItem('authToken');
     }
 };

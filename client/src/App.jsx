@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useState, useEffect } from "react";
 
 import Login from "../src/pages/auth/login";
 import AuthSuccess from "../src/pages/auth/AuthSuccess"; 
@@ -11,24 +12,29 @@ import { developmentConfig } from "./config/development";
 import ComponentSandbox from "./assets/components/development/ComponentSandbox";
 
 function App() {
-  const token = localStorage.getItem("token") || localStorage.getItem("authToken"); // guarda el JWT cuando haces login
-  let user = null;
+  const [user, setUser] = useState(null); // <-- ahora manejamos el usuario como estado
 
-  if (token) {
-    try {
-      user = jwtDecode(token); // here we get { id, email, role, iat, exp, ... }
-      // optional: validating token expiration
-      if (user.exp * 1000 < Date.now()) {
+  useEffect(() => {
+    const token = localStorage.getItem("token") || localStorage.getItem("authToken"); 
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // decodifica el JWT
+        // validar expiración del token
+        if (decoded.exp * 1000 > Date.now()) {
+          setUser(decoded);
+        } else {
+          localStorage.removeItem("token");
+          localStorage.removeItem("authToken");
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Token inválido:", error);
         localStorage.removeItem("token");
         localStorage.removeItem("authToken");
-        user = null;
+        setUser(null);
       }
-    } catch (error) {
-      console.error("Token inválido:", error);
-      localStorage.removeItem("token");
-      localStorage.removeItem("authToken");
     }
-  }
+  }, []); // se ejecuta una sola vez al montar
 
   if (developmentConfig.enableComponentSandbox) {
     console.log('🔧 Modo desarrollo activo - Mostrando ComponentSandbox');
@@ -41,7 +47,10 @@ function App() {
       ) : (
         <Routes>
           {/* Ruta de login */}
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+          <Route
+            path="/login"
+            element={!user ? <Login setUser={setUser} /> : <Navigate to="/dashboard" />}
+          />
           
           {/* NUEVA RUTA: Auth success callback de Google */}
           <Route path="/auth-success" element={<AuthSuccess />} />
@@ -53,19 +62,19 @@ function App() {
               !user ? (
                 <Navigate to="/login" />
               ) : (
-                <Navigate to={user.role === "admin" ? "/dashboard/admin" : "/dashboard/user"} />
+                <Navigate to={"/dashboard/admin"} />
               )
             }
           />
 
           {/* Protected Dashboards */}
-          <Route
+{/*           <Route
             path="/dashboard/user"
             element={user?.role === "user" ? <UserDashboard /> : <Navigate to="/login" />}
-          />
+          /> */}
           <Route
             path="/dashboard/admin"
-            element={user?.role === "admin" ? <AdminDashboard /> : <Navigate to="/login" />}
+            element={user ? <AdminDashboard /> : <Navigate to="/login" />}
           />
           
           {/* NUEVA RUTA: Dashboard general (sin rol específico) */}

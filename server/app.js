@@ -4,8 +4,8 @@ const User = require("./models/User")
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 const { auth } = require("express-openid-connect");
-const cors = require('cors');
 require('dotenv').config();
 
 //instanciating express
@@ -31,10 +31,11 @@ const config = {
 app.use(cors({
     origin: "http://localhost:4000",
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(auth(config));
 
 // Ruta para INICIAR login con Google (redirige a Auth0)
