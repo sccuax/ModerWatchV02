@@ -4,6 +4,7 @@ import StatsSection from './StatsSection';
 export default function MainContent({ 
     children, 
     showSection = true, 
+    showWaving = true,
     userName = "Jonathan",
     buttons = [],  // ← CAMBIO: Recibir array de botones
     onCloseDropdown
@@ -17,6 +18,7 @@ export default function MainContent({
                 userName={userName}
                 buttons={buttons}  // ← CAMBIO: pasar buttons
                 onCloseDropdown={onCloseDropdown}
+                showWaving={showWaving}
             />
 
             {/* ----------------showing stats section----------------- */}

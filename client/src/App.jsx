@@ -6,6 +6,7 @@ import Login from "../src/pages/auth/login";
 import AuthSuccess from "../src/pages/auth/AuthSuccess"; 
 //import UserDashboard from "./pages/Dashboard/UserDashboard";
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
+import SignUp from './pages/auth/SignUp'
 
 // Importaciones para el modo desarrollo
 import { developmentConfig } from "./config/development";
@@ -51,6 +52,11 @@ function App() {
             path="/login"
             element={!user ? <Login setUser={setUser} /> : <Navigate to="/dashboard" />}
           />
+
+           <Route
+    path="/signup"
+    element={!user ? <SignUp setUser={setUser} /> : <Navigate to="/dashboard" />}
+  />
           
           {/* NUEVA RUTA: Auth success callback de Google */}
           <Route path="/auth-success" element={<AuthSuccess />} />

@@ -176,7 +176,7 @@ const handleGoogleLogin = () => {
           <p className='bodyText text-[var(--color-text-black)]'>
             Don’t have an account?
           </p>
-          <Link to="/SignUp" className='bodyText text-[var(--color-text-purple)] hover:underline'>
+          <Link to="/signUp" className='bodyText text-[var(--color-text-purple)] hover:underline'>
           Sign up
           </Link>
         </div>

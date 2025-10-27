@@ -5,6 +5,7 @@ import NotificationDropdown from "../notifications/NotificationDropdown";
 
 export default function PageHeader({ 
     userName = "Usuario",
+    showWaving = true,
     buttons = [],  // ← CAMBIO: Recibir array de botones
     onCloseDropdown
 }) {
@@ -18,15 +19,20 @@ export default function PageHeader({
         }).format(date);
     };
     
+
+
     return (
         <header className="flex items-start justify-between w-full border-b-[0.5px] pb-[54px]
         px-[var(--padding-s)] pt-[var(--marging-M)] border-[var(--color-border-gray)]">
             {/* -- waving -- */}
             <div className="flex flex-col gap-[var(--marging-M)]">
                 <h1 className="heading1 text-[var(--color-text-black)]">Hello, {userName}!</h1>
-                <p className="supportingText text-[var(--color-text-gray)]">
+                {showWaving && (
+                    <p className="supportingText text-[var(--color-text-gray)]">
                     Welcome back, let's do some administrative task
-                </p>
+                    </p>
+                )}
+
             </div>
             
             {/* -- buttons container -- */}

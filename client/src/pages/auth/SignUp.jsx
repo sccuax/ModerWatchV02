@@ -76,6 +76,7 @@ export default function SignUp() {
             />
             <MainContent
                 showSection={false}
+                showWaving={false}
                 userName='Welcome to MW'
                 buttons={buttonsConfig}  // ← CAMBIO: pasar buttonsConfig
                 onCloseDropdown={() => setOpenDropdown(null)}
