@@ -1,8 +1,8 @@
+// server/app.js
 const jwt = require("jsonwebtoken");
 const User = require("./models/User");
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const { auth } = require("express-openid-connect");
 require('dotenv').config();
@@ -18,15 +18,15 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: process.env.SECRET_KEY,
-  baseURL: process.env.AUTH0_BASE_URL,
+  baseURL: process.env.AUTH0_BASE_URL,           // Ej: "http://localhost:3000"
   clientID: process.env.AUTH0_CLIENT_ID,
   issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
   routes: {
-    callback: '/api/auth/google/callback',
+    callback: '/api/auth/google/callback'        // Ruta de callback personalizada
   },
 };
 
-// Middlewares
+// Middlewares: CORS / body parsers
 app.use(cors({
   origin: "http://localhost:4000",
   credentials: true,
@@ -35,9 +35,8 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(auth(config));
 
-// ✅ Crear servidor HTTP + WebSocket ANTES de las rutas
+// ============ SERVER + SOCKET.IO ============
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -46,24 +45,25 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
     credentials: true,
   },
-
-    pingInterval: 25000,
-  pingTimeout: 60000,
 });
 
-// ✅ IMPORTANTE: Compartir io con las rutas
+// Compartir io con rutas/controllers
 app.set("io", io);
 
-// ✅ Eventos WebSocket
+// Eventos WebSocket
 io.on("connection", (socket) => {
   console.log("🟢 Cliente conectado:", socket.id);
 
-  socket.on("disconnect", () => {
-    console.log("🔴 Cliente desconectado:", socket.id);
+  socket.on("disconnect", (reason) => {
+    console.log("🔴 Cliente desconectado:", socket.id, reason);
   });
 });
 
-// Rutas Auth0
+// ============ AUTH ROUTES (solo /api/auth) ============
+// 🔹 Montamos el middleware de Auth0 **globalmente** para que maneje correctamente la ruta de callback
+app.use(auth(config));
+
+// Ruta para iniciar login con Google
 app.get("/api/auth/google/login", (req, res) => {
   res.oidc.login({
     returnTo: "/api/auth/google/users",
@@ -73,6 +73,7 @@ app.get("/api/auth/google/login", (req, res) => {
   });
 });
 
+// Ruta post-login (cuando Auth0 redirige después del login)
 app.get("/api/auth/google/users", async (req, res) => {
   try {
     if (!req.oidc.isAuthenticated()) {
@@ -96,6 +97,7 @@ app.get("/api/auth/google/users", async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    // Redirige al frontend con el token
     res.redirect(`http://localhost:4000/auth-success?token=${token}`);
   } catch (error) {
     console.error("Error en callback de Google:", error);
@@ -103,13 +105,14 @@ app.get("/api/auth/google/users", async (req, res) => {
   }
 });
 
+// Ruta logout
 app.get("/api/auth/logout", (req, res) => {
   res.oidc.logout({
     returnTo: "http://localhost:4000/login",
   });
 });
 
-// Importar rutas
+// ============ API ROUTES ============
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 
@@ -131,7 +134,7 @@ mongoose.connect(process.env.MONGO_URI)
     process.exit(1);
   });
 
-// ✅ Iniciar servidor
+// Iniciar servidor (HTTP + WebSocket)
 server.listen(port, () => {
   console.log(`🚀 Server + WebSocket running on port ${port}`);
 });
