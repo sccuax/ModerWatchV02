@@ -1,4 +1,4 @@
-// src/hooks/useNotificationDropdown.js
+// client/src/hooks/useNotificationDropdown.js
 import { useState, useCallback, useEffect, useRef } from "react";
 import {
   fetchUserMessages,
@@ -11,6 +11,7 @@ import { useWebSocket } from "./useWebSocket";
 
 export function useNotificationDropdown() {
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const activeDropdownRef = useRef(null); // ref para leer estado dentro de callbacks
   const [systemNotifications, setSystemNotifications] = useState([]);
   const [userMessages, setUserMessages] = useState([]);
   const [accessRequests, setAccessRequests] = useState([]);
@@ -18,32 +19,34 @@ export function useNotificationDropdown() {
   const [messageCount, setMessageCount] = useState(0);
   const [requestCount, setRequestCount] = useState(0);
 
-  // Ref para evitar incrementos múltiples por el mismo evento
+  // refs para evitar duplicados por eventos en vivo
   const seenMessageIdsRef = useRef(new Set());
   const seenRequestIdsRef = useRef(new Set());
 
-  // Toggle dropdown Y resetear contador cuando se ABRE / se CIERRA
+  // sincronizar ref con estado
+  useEffect(() => {
+    activeDropdownRef.current = activeDropdown;
+  }, [activeDropdown]);
+
+  // Toggle: al abrir marcamos como leido (contador -> 0)
   const toggleDropdown = useCallback((dropdownId) => {
     setActiveDropdown((prev) => {
-      const isOpening = prev !== dropdownId;
-      // Si abrimos: reset contador del tipo
-      if (isOpening) {
-        if (dropdownId === "messages") setMessageCount(0);
-        if (dropdownId === "requests") setRequestCount(0);
+      const next = prev === dropdownId ? null : dropdownId;
+
+      // Al abrir, reiniciamos contador (schedule para evitar efectos durante render)
+      if (next === "messages") {
+        setTimeout(() => setMessageCount(0), 0);
+      } else if (next === "requests") {
+        setTimeout(() => setRequestCount(0), 0);
       }
-      // Si cerramos (prev === dropdownId) -> retornará null, reiniciamos contadores también:
-      if (!isOpening) {
-        setMessageCount(0);
-        setRequestCount(0);
-      }
-      return prev === dropdownId ? null : dropdownId;
+
+      return next;
     });
   }, []);
 
   const closeAllDropdowns = useCallback(() => {
     setActiveDropdown(null);
-    setMessageCount(0);
-    setRequestCount(0);
+    // no tocar contadores aquí: queremos que queden en 0 hasta que lleguen nuevos items
   }, []);
 
   const isDropdownOpen = useCallback(
@@ -51,7 +54,7 @@ export function useNotificationDropdown() {
     [activeDropdown]
   );
 
-  // ========== HELPERS DE FORMATO (internos usan tu helper exportado) ==========
+  // helper seguro
   const safeArray = (maybeArray) => (Array.isArray(maybeArray) ? maybeArray : []);
 
   // ========== SYSTEM NOTIFICATIONS ==========
@@ -63,11 +66,8 @@ export function useNotificationDropdown() {
     );
     setSystemNotifications((prev) => [formatted, ...prev]);
     setNotificationCount((prev) => prev + 1);
-
     if (notification.autoClose !== false) {
-      setTimeout(() => {
-        removeSystemNotification(formatted.id);
-      }, 10000);
+      setTimeout(() => removeSystemNotification(formatted.id), 10000);
     }
   }, []);
 
@@ -81,32 +81,33 @@ export function useNotificationDropdown() {
     try {
       const messages = safeArray(await fetchUserMessages());
       setUserMessages(messages);
-
-      // set count only if dropdown isn't open
-      setMessageCount(activeDropdown === "messages" ? 0 : messages.length);
-
-      // mark seen ids so we don't duplicate on live events
+      // si está abierto, contador = 0, si no, la longitud
+      setMessageCount(activeDropdownRef.current === "messages" ? 0 : messages.length);
+      // registrar ids vistos para evitar duplicados al recibir por socket
       messages.forEach((m) => seenMessageIdsRef.current.add(m.id ?? m._id));
     } catch (error) {
-      console.error('Error loading user messages:', error);
+      console.error("Error loading user messages:", error);
       setUserMessages([]);
       setMessageCount(0);
     }
-  }, [activeDropdown]);
+  }, []);
 
   const addUserMessage = useCallback((user) => {
     const formatted = createUserMessageNotification(user);
     const id = formatted.id ?? formatted._id;
-    // prevent duplicates
-    if (seenMessageIdsRef.current.has(id)) return;
-
+    if (!id) return;
+    if (seenMessageIdsRef.current.has(id)) return; // dedupe
     seenMessageIdsRef.current.add(id);
     setUserMessages((prev) => [formatted, ...prev]);
 
-    if (activeDropdown !== "messages") {
+    // solo incrementar si el dropdown NO está abierto (el usuario no lo está viendo)
+    if (activeDropdownRef.current !== "messages") {
       setMessageCount((prev) => prev + 1);
+    } else {
+      // si está abierto, marcamos leído en UI (contador ya debe estar 0)
+      setMessageCount(0);
     }
-  }, [activeDropdown]);
+  }, []);
 
   const removeUserMessage = useCallback((id) => {
     setUserMessages((prev) => prev.filter((m) => (m.id ?? m._id) !== id));
@@ -119,28 +120,30 @@ export function useNotificationDropdown() {
     try {
       const requests = safeArray(await fetchAccessRequests());
       setAccessRequests(requests);
-
-      setRequestCount(activeDropdown === "requests" ? 0 : requests.length);
-
+      setRequestCount(activeDropdownRef.current === "requests" ? 0 : requests.length);
       requests.forEach((r) => seenRequestIdsRef.current.add(r.id ?? r._id));
     } catch (error) {
-      console.error('Error loading access requests:', error);
+      console.error("Error loading access requests:", error);
       setAccessRequests([]);
       setRequestCount(0);
     }
-  }, [activeDropdown]);
+  }, []);
 
   const addAccessRequest = useCallback((user) => {
     const formatted = createAccessRequestNotification(user);
     const id = formatted.id ?? formatted._id;
+    if (!id) return;
     if (seenRequestIdsRef.current.has(id)) return;
-
     seenRequestIdsRef.current.add(id);
     setAccessRequests((prev) => [formatted, ...prev]);
-    if (activeDropdown !== "requests") {
+
+    // usar ref para evitar stale closures cuando el evento viene por socket
+    if (activeDropdownRef.current !== "requests") {
       setRequestCount((prev) => prev + 1);
+    } else {
+      setRequestCount(0);
     }
-  }, [activeDropdown]);
+  }, []);
 
   const removeAccessRequest = useCallback((id) => {
     setAccessRequests((prev) => prev.filter((r) => (r.id ?? r._id) !== id));
@@ -148,7 +151,7 @@ export function useNotificationDropdown() {
     seenRequestIdsRef.current.delete(id);
   }, []);
 
-  // ========== LIMPIAR TODO DE UN TIPO ==========
+  // limpiar por tipo
   const clearAll = useCallback((type) => {
     switch (type) {
       case "notifications":
@@ -170,66 +173,63 @@ export function useNotificationDropdown() {
     }
   }, []);
 
-  // ========== WEBSOCKET: callbacks para eventos en tiempo real ==========
-  const handleNewUser = useCallback((userData) => {
-    // userData puede venir con _id o id
-    if (!userData) return;
-    // si tiene mensaje, lo agregamos a userMessages (deduplicado)
-    if (userData.message && userData.message.trim() !== "") {
-      addUserMessage(userData);
-    }
-    // si el usuario está pending, lo agregamos a accessRequests (deduplicado)
-    if (userData.status === "pending") {
-      addAccessRequest(userData);
-    }
-  }, [addUserMessage, addAccessRequest]);
+  // ========== WEBSOCKET: callbacks ==========
+  const handleNewUser = useCallback(
+    (userData) => {
+      if (!userData) return;
+      if (userData.message && userData.message.trim() !== "") {
+        addUserMessage(userData);
+      }
+      if (userData.status === "pending") {
+        addAccessRequest(userData);
+      }
+    },
+    [addUserMessage, addAccessRequest]
+  );
 
-  const handleStatusUpdate = useCallback((userData) => {
-    if (!userData) return;
-    // Si cambió a non-pending, eliminarlo de accessRequests
-    if (userData.status && userData.status !== 'pending') {
-      removeAccessRequest(userData._id ?? userData.id);
-    }
-    // Si cambió a pending, agregarlo (por ejemplo si vuelven a pending)
-    if (userData.status === 'pending') {
-      addAccessRequest(userData);
-    }
-    // también podríamos actualizar mensajes si el payload trae message
-    if (userData.message && userData.message.trim() !== "") {
-      addUserMessage(userData);
-    }
-  }, [removeAccessRequest, addAccessRequest, addUserMessage]);
+  const handleStatusUpdate = useCallback(
+    (userData) => {
+      if (!userData) return;
+      // si dejó de ser pending, remover de requests
+      if (userData.status && userData.status !== "pending") {
+        removeAccessRequest(userData._id ?? userData.id);
+      }
+      if (userData.status === "pending") {
+        addAccessRequest(userData);
+      }
+      if (userData.message && userData.message.trim() !== "") {
+        addUserMessage(userData);
+      }
+    },
+    [removeAccessRequest, addAccessRequest, addUserMessage]
+  );
 
-  const handleUserDeleted = useCallback((data) => {
-    if (!data) return;
-    const id = data._id ?? data.id;
-    removeUserMessage(id);
-    removeAccessRequest(id);
-  }, [removeUserMessage, removeAccessRequest]);
+  const handleUserDeleted = useCallback(
+    (data) => {
+      if (!data) return;
+      const id = data._id ?? data.id;
+      removeUserMessage(id);
+      removeAccessRequest(id);
+    },
+    [removeUserMessage, removeAccessRequest]
+  );
 
-  // Conectar websocket (useWebSocket devuelve socketRef, pero aquí solo usamos callbacks)
+  // conectar websocket (usa los callbacks arriba)
   useWebSocket({
     onNewUser: handleNewUser,
     onStatusUpdate: handleStatusUpdate,
     onUserDeleted: handleUserDeleted,
   });
 
-  // ========== FETCH INICIAL ==========
+  // fetch inicial
   useEffect(() => {
-    // Cargar ambos en paralelo
     (async () => {
       await Promise.all([loadUserMessages(), loadAccessRequests()]);
     })();
   }, [loadUserMessages, loadAccessRequests]);
 
-  // ========== Reset counters si cerramos dropdown (extra, porque toggleDropdown ya maneja apertura) ==========
-  useEffect(() => {
-    if (activeDropdown === null) {
-      // Reiniciar contadores al cerrar (seguro)
-      setMessageCount(0);
-      setRequestCount(0);
-    }
-  }, [activeDropdown]);
+  // NOTE: no hay efecto que ponga contadores a 0 al cerrar; el reinicio se hace al abrir (toggleDropdown)
+  // esto permite que: abrir -> contador a 0; permanecer en 0 hasta nuevos items; nuevos items incrementan solo si dropdown cerrado.
 
   return {
     activeDropdown,

@@ -118,6 +118,7 @@
   --color-border-error-red: var(--color-red-500);
   --color-border-focus: var(--color-purple-400);
   --color-border-focus-2: var(--color-purple-200);
+  --color-border-light-gray: var(--color-neutral-200);
 
   /* STATUS & TAGS */
   --color-tags-notifications: var(--color-red-700);
