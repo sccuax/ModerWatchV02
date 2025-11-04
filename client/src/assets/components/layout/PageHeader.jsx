@@ -1,12 +1,14 @@
+// PageHeader.jsx
 import HeaderButton from "../buttons/headerButton";
 import Icon from "../sideBarLeft/icon";
 import Badge from "../buttons/badge";
 import NotificationDropdown from "../notifications/NotificationDropdown";
+import Dropdown from "../notifications/dropDown"; // nuevo dropdown (animado)
 
-export default function PageHeader({ 
+export default function PageHeader({
     userName = "Usuario",
     showWaving = true,
-    buttons = [],  // ← CAMBIO: Recibir array de botones
+    buttons = [],  // recibir array de botones
     onCloseDropdown
 }) {
 
@@ -18,8 +20,6 @@ export default function PageHeader({
             year: 'numeric'
         }).format(date);
     };
-    
-
 
     return (
         <header className="flex items-start justify-between w-full border-b-[0.5px] pb-[54px]
@@ -29,36 +29,53 @@ export default function PageHeader({
                 <h1 className="heading1 text-[var(--color-text-black)]">Hello, {userName}!</h1>
                 {showWaving && (
                     <p className="supportingText text-[var(--color-text-gray)]">
-                    Welcome back, let's do some administrative task
+                        Welcome back, let's do some administrative task
                     </p>
                 )}
-
             </div>
-            
+
             {/* -- buttons container -- */}
             <div className="flex flex-row gap-[var(--marging-M)]">
                 {buttons.map((button) => (
                     <div key={button.id} className="relative">
-                        <HeaderButton 
+                        <HeaderButton
                             onClick={button.onClick}
-                            icon={button.icon} 
+                            icon={button.icon}
                             isActive={button.isActive}
                         />
                         <Badge count={button.count} />
 
-                        {/* Mostrar dropdown si existe configuración */}
+                        {/* ---------- Condicional: Mantener compatibilidad con el dropdown viejo ---------- */}
                         {button.dropdown && (
-                            <NotificationDropdown
-                                messages={button.dropdown.messages}  // ← CAMBIO: usar messages del dropdown
-                                isOpen={button.isActive}  // ← CAMBIO: usar isActive del botón
-                                onClose={onCloseDropdown}
-                                title={button.dropdown.title}
-                                emptyMessage={button.dropdown.emptyMessage}
-                            />
+                            <>
+                                {/*
+                                Por defecto (si no se especifica button.dropdown.type) se usa
+                                NotificationDropdown (comportamiento actual / retrocompatible).
+                                Si button.dropdown.type === 'new' (u otro valor que prefieras),
+                                usamos el nuevo Dropdown (dropDown.jsx).
+                              */}
+                                {(button.dropdown.type === undefined || button.dropdown.type === 'notification') ? (
+                                    <NotificationDropdown
+                                        messages={button.dropdown.messages}
+                                        isOpen={button.isActive}
+                                        onClose={onCloseDropdown}
+                                        title={button.dropdown.title}
+                                        emptyMessage={button.dropdown.emptyMessage}
+                                    />
+                                ) : (
+                                    <Dropdown
+                                        messages={button.dropdown.messages}
+                                        isOpen={button.isActive}
+                                        onClose={onCloseDropdown}
+                                        title={button.dropdown.title}
+                                        emptyMessage={button.dropdown.emptyMessage}
+                                    />
+                                )}
+                            </>
                         )}
                     </div>
                 ))}
-                
+
                 {/*------------Calendar--------- */}
                 <div className="px-[var(--marging-S))] pointer-events-none box-shadow-button-header bg-[var(--color-white)] flex flex-row gap-[var(--marging-S)] 
                 items-center justify-center rounded-tl-[var(--radius-sm)] rounded-br-[var(--radius-sm)]

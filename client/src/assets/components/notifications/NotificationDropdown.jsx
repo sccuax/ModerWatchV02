@@ -10,7 +10,7 @@ export default function NotificationDropdown({
     if (!isOpen) return null;
     
     return (
-        <div className="absolute top-12 right-0 w-80 bg-[var(--color-white)] border border-[var(--color-border-gray)] rounded-[var(--radius-lg)] shadow-xl z-50">
+        <div className="absolute top-12 right-0 w-[400px] h-[300px] flex flex-col gap-[var(--marging-section-S)] bg-[var(--color-white)] border border-[var(--color-border-gray)] rounded-[var(--radius-lg)] shadow-xl z-50">
             {/* Header */}
             <div className="flex h-[48px] items-center justify-between p-[var(--marging-M)] border-b border-[var(--color-border-gray)]">
                 <h3 className="bodyText text-[var(--color-text-black)]">{title}</h3>
@@ -23,7 +23,7 @@ export default function NotificationDropdown({
             </div>
             
             {/* Messages List */}
-            <div className="max-h-96 overflow-y-auto">
+            <div className="max-h-96 gap-[var(--marging-M)] flex flex-col overflow-y-auto">
                 {messages.length === 0 ? (
                     <div className="p-[var(--marging-section-M)] text-center text-[var(--color-text-gray)]">
                         <p className="supportingText">{emptyMessage}</p>
@@ -32,7 +32,7 @@ export default function NotificationDropdown({
                     messages.map((msg, index) => (
                         <div 
                             key={msg.id || index} 
-                            className={`p-[var(--marging-M)] border-b border-[var(--color-border-gray)] flex gap-[var(--marging-S)] ${
+                            className={`p-[var(--marging-M)] flex gap-[var(--marging-S)] ${
                                 msg.type === 'success' 
                                     ? 'bg-[var(--color-bg-light-green)]' 
                                     : msg.type === 'error'

@@ -77,7 +77,7 @@ export default function SideBarLeft({
             <div className="inline-flex flex-col items-start gap-[var(--marging-section-XXL)] pt-[var(--padding-s)]">
                 {/* Logo o título de la aplicación (opcional) */}
                 <div className="inline-flex items-center gap-[var(--marging-S)] p-[var(--padding-s)]">
-                    <img className="w-[71px]" src={logo} alt="Modern Watch Logo" />
+                    <img className="w-[48px]" src={logo} alt="Modern Watch Logo" />
                     <h2 className="headingDisplay text-[var(--color-text-black)]">ADMIN</h2>
                 </div>
                 
