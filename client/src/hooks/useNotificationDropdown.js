@@ -1,4 +1,4 @@
-// src/hooks/useNotificationDropDown.js
+// src/hooks/useNotificationDropdown.js
 import { useState, useCallback, useEffect, useRef } from "react";
 import {
   fetchUserMessages,

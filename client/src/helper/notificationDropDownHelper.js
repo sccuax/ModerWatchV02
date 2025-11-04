@@ -1,11 +1,26 @@
-// notificationDropDownHelper.js - VERSIÓN FINAL CORREGIDA
+// notificationDropDownHelper.js - CON AUTENTICACIÓN
 
 // ============================================
-// FETCH GENÉRICO CON MANEJO DE ERRORES
+// FETCH GENÉRICO CON MANEJO DE ERRORES Y AUTH
 // ============================================
 async function fetchFromAPI(endpoint) {
     try {
-        const response = await fetch(`http://localhost:3000${endpoint}`);
+        // ✅ Obtener token de localStorage
+        const token = localStorage.getItem('token');
+        
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        
+        // ✅ Agregar Authorization header si existe el token
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(`http://localhost:3000${endpoint}`, {
+            method: 'GET',
+            headers: headers,
+        });
 
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -24,11 +39,11 @@ async function fetchFromAPI(endpoint) {
 // ============================================
 export function formatUserMessages(users = []) {
     return users.map((user) => ({
-        id: user._id || user.id, // ✅ CORREGIDO: usar _id de MongoDB
+        id: user._id || user.id,
         type: "message",
-        title: `${user.name} ${user.surname}`, // ✅ CORREGIDO: usar name y surname
-        message: user.message, // ✅ CORREGIDO: campo message del esquema
-        timestamp: new Date(user.createdAt).toLocaleTimeString("es-CO", { // ✅ CORREGIDO: createdAt
+        title: `${user.name} ${user.surname}`,
+        message: user.message,
+        timestamp: new Date(user.createdAt).toLocaleTimeString("es-CO", {
             hour: "2-digit",
             minute: "2-digit",
         }),
@@ -44,7 +59,7 @@ export function formatAccessRequests(users = []) {
     return users.map((user) => ({
         id: user._id,
         type: "request",
-        title: "Nueva solicitud de acceso",
+        title: "New request",
         message: `${user.name} ${user.surname} (${user.email})`,
         timestamp: new Date(user.createdAt).toLocaleTimeString("es-CO", {
             hour: "2-digit",
@@ -59,14 +74,12 @@ export function formatAccessRequests(users = []) {
 // OBTENER MENSAJES DE USUARIOS DESDE EL BACKEND
 // ============================================
 export async function fetchUserMessages() {
-    // Obtener TODOS los usuarios
     const result = await fetchFromAPI('/api/users');
 
     if (!result.success) {
         return [];
     }
 
-    // Filtrar solo los que tienen mensaje
     const allUsers = Array.isArray(result.data) ? result.data : [];
     const usersWithMessage = allUsers.filter(user =>
         user.message && user.message.trim() !== ''
@@ -79,13 +92,12 @@ export async function fetchUserMessages() {
 // OBTENER SOLICITUDES DE ACCESO DESDE EL BACKEND
 // ============================================
 export async function fetchAccessRequests() {
-    const result = await fetchFromAPI('/api/user/status/pending');
+    const result = await fetchFromAPI('/api/users/status/pending');
 
     if (!result.success) {
         return [];
     }
 
-    // El backend devuelve { count, status, users }
     const users = result.data.users || [];
 
     return formatAccessRequests(users);

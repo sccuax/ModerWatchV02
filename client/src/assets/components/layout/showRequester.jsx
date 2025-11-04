@@ -174,7 +174,7 @@ export default function ShowRequester() {
         error: statusError,
         success: statusSuccess,
         approveUser,
-        rejectUser, 
+        rejectUser,
         clearMessages
     } = useUserStatus();
 
@@ -235,10 +235,13 @@ export default function ShowRequester() {
         setLoading(true);
 
         try {
+            const token = localStorage.getItem("token");
+
             const res = await fetch(`http://localhost:3000/api/users/userId/${id}`, {
                 method: "DELETE",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 }
             });
 
@@ -312,9 +315,9 @@ export default function ShowRequester() {
         },
     ];
 
-    useEffect (() => {
-        if (statusError || statusSuccess){
-            const timer = setTimeout (() => {
+    useEffect(() => {
+        if (statusError || statusSuccess) {
+            const timer = setTimeout(() => {
                 clearMessages();
             }, 3000)
 
