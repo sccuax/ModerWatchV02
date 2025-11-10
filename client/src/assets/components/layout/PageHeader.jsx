@@ -80,7 +80,7 @@ export default function PageHeader({
                 <div className="px-[var(--marging-S))] pointer-events-none box-shadow-button-header bg-[var(--color-white)] flex flex-row gap-[var(--marging-S)] 
                 items-center justify-center rounded-tl-[var(--radius-sm)] rounded-br-[var(--radius-sm)]
                 rounded-tr-[var(--radius-md)] rounded-bl-[var(--radius-md)]">
-                    <span className="supportingText w-[121px] text-[var(--color-text-black)] text-center">{getCurrentDate()}</span>
+                    <span className="supportingText w-full text-[var(--color-text-black)] text-center">{getCurrentDate()}</span>
                     <Icon name="calendar" className="w-[var(--size-icon-base)] h-[var(--size-icon-base)]" />
                 </div>
             </div>

@@ -39,21 +39,21 @@ export function RequesterBlock({
         const statusConfig = {
             pending: {
                 text: 'Pending',
-                textColor: 'text-yellow-600',
+                textColor: 'text-[var(--color-text-pending)]',
                 bgColor: 'bg-[var(--color-baadge--pending)]',
-                borderColor: 'border-yellow-300',
+                borderColor: 'border-[var(--color-border-pending)]',
             },
             approved: {
                 text: 'Approved',
-                bgColor: 'bg-green-100',
-                textColor: 'text-green-800',
-                borderColor: 'border-green-300'
+                bgColor: 'bg-[var(--color-baadge--approved)]',
+                textColor: 'text-[var(--color-text-approved)]',
+                borderColor: 'border-[var(--color-border-approved)]'
             },
             rejected: {
                 text: 'Rejected',
-                bgColor: 'bg-red-100',
-                textColor: 'text-red-800',
-                borderColor: 'border-red-300'
+                bgColor: 'bg-[var(--color-baadge--rejected)]',
+                textColor: 'text-[var(--color-text-rejected)]',
+                borderColor: 'border-[var(--color-border-rejected)]'
             }
         };
 

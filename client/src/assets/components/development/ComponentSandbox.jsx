@@ -6,6 +6,7 @@ import AdminDashboard from '../../../pages/Dashboard/AdminDashboard';
 import Login from '../../../pages/auth/login'
 import SignUp from '../../../pages/auth/SignUp'
 import Forms from '../forms/forms'
+import UserDashboard from '../../../pages/Dashboard/UserDashboard';
 import { useState } from 'react';
 import ShowRequester from '../layout/showRequester';
 
@@ -98,6 +99,13 @@ function ComponentSandbox({ activeComponent = 'sidebar' }) {
         return (
           <div className="h-screen w-full">
             <AdminDashboard />
+          </div>
+        );
+
+              case 'user-dashboard':
+        return (
+          <div className="h-screen w-full">
+            <UserDashboard />
           </div>
         );
 

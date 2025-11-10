@@ -7,7 +7,8 @@ export default function MainContent({
     showWaving = true,
     userName = "Jonathan",
     buttons = [],  // ← CAMBIO: Recibir array de botones
-    onCloseDropdown
+    onCloseDropdown,
+    statsData
 }) { 
 
     return (
@@ -24,11 +25,7 @@ export default function MainContent({
             {/* ----------------showing stats section----------------- */}
             <StatsSection 
                 showSection={showSection}
-                statsData={[
-                    { type: 'staff', text: 'Staff', data: '8', colorClass: 'text-[var(--color-text-purple)]' },
-                    { type: 'orders', text: 'Orders', data: '200', colorClass: 'text-[var(--color-text-stock)]' },
-                    { type: 'cancellations', text: 'Cancel', data: '23', colorClass: 'text-[var(--color-text-no-stock)]', className: 'justify-end' }
-                ]}
+                statsData={statsData}
             />
             
             <div className="content-body w-full h-auto">

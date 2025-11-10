@@ -3,7 +3,7 @@ export const developmentConfig = {
     enableComponentSandbox: false, // Cambia a false cuando no necesites desarrollar componentes
     
     // Aquí puedes especificar qué componente quieres ver en desarrollo
-    activeComponent: 'login', // Opciones: 'sidebar', 'dashboard', 'none', etc.
+    activeComponent: 'user-dashboard', // Opciones: 'sidebar', 'dashboard', 'none', etc.
     
     // Mock data para desarrollo
     mockUser: {

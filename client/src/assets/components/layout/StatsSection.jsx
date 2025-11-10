@@ -1,11 +1,17 @@
 import Cancellations from '../../Images/stats/cancellations.png';
 import OrderImage from '../../Images/stats/orders.png';
 import StaffImage from '../../Images/stats/staff.png';
+import Suppliers from '../../Images/stats/suppliers.webp';
+import Products from '../../Images/stats/products.webp';
+import NoStock from '../../Images/stats/noStock.webp';
 
 const imageStats = {
     cancellations: Cancellations,
     orders: OrderImage,
     staff: StaffImage,
+    suppliers: Suppliers,
+    products: Products,
+    noStock: NoStock,
 };
 
 export function StatCard({ type, className, text, data, colorClass, ...props }) {

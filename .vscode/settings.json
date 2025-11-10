@@ -1,0 +1,16 @@
+{
+    "auto-run-command.rules": [
+        {
+            "condition": "always",
+            "command": "cd client && npm run dev",
+            "message": "Starting React App",
+            "shellCommand": true
+        },
+        {
+            "condition": "always",
+            "command": "cd server && node app.js",
+            "message": "Starting Express Server",
+            "shellCommand": true
+        }
+    ]
+}

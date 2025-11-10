@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start React App",
+            "type": "process",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd client && npm run dev"
+            ],
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Express Server",
+            "type": "shell",
+            "command": "cd server && node app.js",
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

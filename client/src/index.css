@@ -51,16 +51,16 @@
   --color-neutral-900: #111827;
 
   /* Yellow */
-  --color-yellow-50: #fefce8;
-  --color-yellow-100: #fef9c3;
-  --color-yellow-200: #fef08a;
-  --color-yellow-300: #fde047;
-  --color-yellow-400: #facc15;
-  --color-yellow-500: #eab308;
-  --color-yellow-600: #ca8a04;
-  --color-yellow-700: #a16207;
-  --color-yellow-800: #854d0e;
-  --color-yellow-900: #713f12;
+  --color-yellow-50: #FFFBEB;
+  --color-yellow-100: #FEF3C7;
+  --color-yellow-200: #FDE68A;
+  --color-yellow-300: #FCD34D;
+  --color-yellow-400: #FBBF24;
+  --color-yellow-500: #F59E0B;
+  --color-yellow-600: #D97706;
+  --color-yellow-700: #B45309;
+  --color-yellow-800: #92400E;
+  --color-yellow-900: #78350F;
 
   /* Sizing */
   --size-16: 16px;
@@ -88,6 +88,9 @@
   --color-text-stock: var(--color-green-500);
   --color-text-no-stock: var(--color-red-500);
   --color-text-gray: var(--color-neutral-500);
+  --color-text-pending: var(--color-yellow-800);
+  --color-text-rejected: var(--color-red-800);
+  --color-text-approved: var(--color-green-800);
 
   /* BACKGROUND */
   --color-bg-black: var(--color-neutral-900);
@@ -97,6 +100,7 @@
   --color-bg-light-purple: var(--color-purple-200);
   --color-bg-light-gray: var(--color-neutral-100);
   --color-bg-light-green: var(--color-green-50);
+
 
   /* ICONS */
   --color-icon-black: var(--color-neutral-900);
@@ -119,6 +123,9 @@
   --color-border-focus: var(--color-purple-400);
   --color-border-focus-2: var(--color-purple-200);
   --color-border-light-gray: var(--color-neutral-200);
+  --color-border-pending: var(--color-yellow-300);
+  --color-border-approved: var(--color-green-300);
+  --color-border-rejected: var(--color-red-300);
 
   /* STATUS & TAGS */
   --color-tags-notifications: var(--color-red-700);
