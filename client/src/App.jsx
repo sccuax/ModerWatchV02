@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react"; // ✅ Importa useCallback
 
 import Login from "../src/pages/auth/login";
 import AuthSuccess from "../src/pages/auth/AuthSuccess"; 
-//import UserDashboard from "./pages/Dashboard/UserDashboard";
+import UserDashboard from "./pages/Dashboard/UserDashboard";
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import SignUp from './pages/auth/SignUp'
 
@@ -12,33 +12,66 @@ import SignUp from './pages/auth/SignUp'
 import { developmentConfig } from "./config/development";
 import ComponentSandbox from "./assets/components/development/ComponentSandbox";
 
+// ✅ Componente de ruta protegida
+function ProtectedRoute({ children, user, allowedRole }) {
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  if (allowedRole && user.role !== allowedRole) {
+    return <Navigate to={`/dashboard/${user.role}`} replace />;
+  }
+  
+  return children;
+}
+
 function App() {
-  const [user, setUser] = useState(null); // <-- ahora manejamos el usuario como estado
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ SOLUCIÓN: Envuelve setUser en useCallback para que no cambie en cada render
+  const handleSetUser = useCallback((userData) => {
+    console.log('📝 Actualizando usuario:', userData);
+    setUser(userData);
+  }, []);
 
   useEffect(() => {
+    console.log('🔄 App useEffect ejecutándose');
     const token = localStorage.getItem("token") || localStorage.getItem("authToken"); 
+    
     if (token) {
       try {
-        const decoded = jwtDecode(token); // decodifica el JWT
-        // validar expiración del token
+        const decoded = jwtDecode(token);
+        console.log('🔍 Token decodificado:', decoded);
+        
         if (decoded.exp * 1000 > Date.now()) {
+          console.log('✅ Estableciendo usuario:', decoded);
           setUser(decoded);
         } else {
-          localStorage.removeItem("token");
-          localStorage.removeItem("authToken");
+          console.log('❌ Token expirado');
+          localStorage.clear();
           setUser(null);
         }
       } catch (error) {
-        console.error("Token inválido:", error);
-        localStorage.removeItem("token");
-        localStorage.removeItem("authToken");
+        console.error("❌ Error al decodificar token:", error);
+        localStorage.clear();
         setUser(null);
       }
     }
-  }, []); // se ejecuta una sola vez al montar
+    
+    setLoading(false);
+  }, []); // ✅ Array vacío - solo se ejecuta UNA vez al montar
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-xl">Cargando...</p>
+      </div>
+    );
+  }
 
   if (developmentConfig.enableComponentSandbox) {
-    console.log('🔧 Modo desarrollo activo - Mostrando ComponentSandbox');
+    console.log('🔧 Modo desarrollo activo');
   }
 
   return (
@@ -47,50 +80,65 @@ function App() {
         <ComponentSandbox activeComponent={developmentConfig.activeComponent} />
       ) : (
         <Routes>
-          {/* Ruta de login */}
+          {/* Rutas públicas */}
           <Route
             path="/login"
-            element={!user ? <Login setUser={setUser} /> : <Navigate to="/dashboard" />}
+            element={user ? <Navigate to={`/dashboard/${user.role}`} replace /> : <Login setUser={handleSetUser} />}
           />
 
-           <Route
-    path="/signup"
-    element={!user ? <SignUp setUser={setUser} /> : <Navigate to="/dashboard" />}
-  />
+          <Route
+            path="/signup"
+            element={user ? <Navigate to={`/dashboard/${user.role}`} replace /> : <SignUp />}
+          />
           
-          {/* NUEVA RUTA: Auth success callback de Google */}
-          <Route path="/auth-success" element={<AuthSuccess />} />
+          <Route path="/auth-success" element={<AuthSuccess setUser={handleSetUser} />} />
 
-          {/* if there is no users, it redirects to login page */}
+          {/* Ruta raíz */}
           <Route
             path="/"
             element={
-              !user ? (
-                <Navigate to="/login" />
+              user ? (
+                <Navigate to={`/dashboard/${user.role}`} replace />
               ) : (
-                <Navigate to={"/dashboard/admin"} />
+                <Navigate to="/login" replace />
               )
             }
           />
 
-          {/* Protected Dashboards */}
-{/*           <Route
-            path="/dashboard/user"
-            element={user?.role === "user" ? <UserDashboard /> : <Navigate to="/login" />}
-          /> */}
-          <Route
-            path="/dashboard/admin"
-            element={user ? <AdminDashboard /> : <Navigate to="/login" />}
-          />
-          
-          {/* NUEVA RUTA: Dashboard general (sin rol específico) */}
+          {/* Dashboard general */}
           <Route
             path="/dashboard"
-            element={user ? <AdminDashboard /> : <Navigate to="/login" />}
+            element={
+              user ? (
+                <Navigate to={`/dashboard/${user.role}`} replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
           />
 
-          {/* default redirection */}
-          <Route path="*" element={<Navigate to="/" />} />
+          {/* Dashboard de user */}
+          <Route
+            path="/dashboard/user"
+            element={
+              <ProtectedRoute user={user} allowedRole="user">
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Dashboard de admin */}
+          <Route
+            path="/dashboard/admin"
+            element={
+              <ProtectedRoute user={user} allowedRole="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Redirección por defecto */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}
     </Router>

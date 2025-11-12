@@ -92,7 +92,7 @@ app.get("/api/auth/google/users", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: existingUser._id, email: existingUser.email },
+      { id: existingUser._id, email: existingUser.email, role: existingUser.role },
       process.env.SECRET_KEY,
       { expiresIn: "7d" }
     );

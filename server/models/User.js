@@ -9,35 +9,41 @@ const userSchema = new mongoose.Schema({
     nationalId: { type: String, required: true, unique: true },
     message: { type: String, required: false },
     password: { type: String, required: true },
-    status: { 
-        type: String, 
-        enum: ['pending', 'approved', 'rejected'], 
-        default: 'pending' 
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+    },
+    // ✅ AGREGAR ESTE CAMPO
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'  // Por defecto todos son 'user'
     }
 }, { timestamps: true });
 
 
 
 // Hashing password before saving
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
-    
+
     try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
     } catch (err) {
         next(err);
     }
 });
 
 // comparing passwords when logging in
-userSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
 // hidding passwords in JSON response
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
     const obj = this.toObject();
     delete obj.password;
     return obj;

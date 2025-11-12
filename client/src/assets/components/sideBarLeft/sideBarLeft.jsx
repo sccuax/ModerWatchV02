@@ -4,38 +4,45 @@ import { useState } from "react";
 import { useLogOut } from '../../../hooks/logOutUser'
 import logo from "../../images/logo/modernwatchlogo.png";
 
-// SidebarLeft con mejor gestión de estado y navegación
 export default function SideBarLeft({ 
     mainBottomMenu,
     mainMenu,
-    onNavigate,     // Función callback para manejar navegación
-    currentPath = "/" // Ruta actual para determinar qué item está activo
+    onNavigate,
+    currentPath = "/"
 }) {
-    // Estado local para manejar qué elemento del menú está activo
     const [activeItem, setActiveItem] = useState(currentPath);
+    const [expandedItems, setExpandedItems] = useState([]); // ✅ NUEVO: Estado para items expandidos
     const navigate = useNavigate();
     const { handleLogout } = useLogOut();
 
     // Configuración de los elementos del menú
-    // Esta estructura te permite agregar o quitar elementos fácilmente
     const menuItems = [
         {
             id: 'home',
             label: 'Home',
-            icon: 'home',           // Nota: ahora usamos strings, no componentes
+            icon: 'home',
             href: '/'
         },
         {
             id: 'products',
             label: 'Add Product',
-            icon: 'product',        // El nombre debe coincidir con el diccionario en Icon
+            icon: 'product',
             href: '/products'
         },
         {
             id: 'suppliers',
             label: 'Supplier Info',
             icon: 'supplier',
-            href: '/suppliers'
+            href: '/suppliers',
+            hasSubmenu: true, // ✅ NUEVO
+            submenuItems: [   // ✅ NUEVO
+                {
+                    id: 'add-supplier',
+                    label: 'Add supplier',
+                    icon: 'plus', // o 'plus'
+                    href: '/suppliers/add'
+                }
+            ]
         },
         {
             id: 'inventory',
@@ -63,11 +70,29 @@ export default function SideBarLeft({
 
     const menu = mainMenu || menuItems;
     const bottomMenu = mainBottomMenu || bottomMenuItems;
-    // Función para manejar clicks en elementos del menú
+
+    // ✅ NUEVO: Función para manejar clicks en elementos del menú
     const handleMenuClick = (item) => {
-        setActiveItem(item.href);
-        navigate(item.href);
-        onNavigate && onNavigate(item.href, item);
+        // Si tiene submenú, expandir/colapsar
+        if (item.hasSubmenu) {
+            setExpandedItems(prev => 
+                prev.includes(item.id) 
+                    ? prev.filter(id => id !== item.id) 
+                    : [...prev, item.id]
+            );
+        } else {
+            // Si no tiene submenú, navegar normalmente
+            setActiveItem(item.href);
+            navigate(item.href);
+            onNavigate && onNavigate(item.href, item);
+        }
+    };
+
+    // ✅ NUEVO: Función para manejar clicks en sub-items
+    const handleSubmenuClick = (parentItem, subItem) => {
+        setActiveItem(subItem.href);
+        navigate(subItem.href);
+        onNavigate && onNavigate(subItem.href, subItem);
     };
 
     return (
@@ -75,24 +100,28 @@ export default function SideBarLeft({
             text-white w-64 shadow-lg px-[var(--marging-M)] py-[var(--marging-section-M)] border-r-[0.5px] border-[var(--color-border-gray)]">
             {/* Sección superior del menú */}
             <div className="inline-flex flex-col items-start gap-[var(--marging-section-XXL)] pt-[var(--padding-s)]">
-                {/* Logo o título de la aplicación (opcional) */}
+                {/* Logo */}
                 <div className="inline-flex items-center gap-[var(--marging-S)] p-[var(--padding-s)]">
                     <img className="w-[48px]" src={logo} alt="Modern Watch Logo" />
                     <h2 className="headingDisplay text-[var(--color-text-black)]">ADMIN</h2>
                 </div>
                 
                 {/* Elementos principales del menú */}
-                <div className="flex gap-[var(--marging-M)] flex-col">
-                {menu.map((item) => (
-                    <MenuItem
-                        key={item.id}
-                        label={item.label}
-                        icon={item.icon}
-                        isActive={activeItem === item.href}
-                        href={item.href}
-                        onClick={() => handleMenuClick(item)}
-                    />
-                ))}</div>
+                <div className="flex gap-[var(--marging-M)] flex-col w-full">
+                    {menu.map((item) => (
+                        <MenuItem
+                            key={item.id}
+                            label={item.label}
+                            icon={item.icon}
+                            isActive={activeItem === item.href}
+                            hasSubmenu={item.hasSubmenu}
+                            isExpanded={expandedItems.includes(item.id)}
+                            submenuItems={item.submenuItems}
+                            onClick={() => handleMenuClick(item)}
+                            onSubmenuClick={(subItem) => handleSubmenuClick(item, subItem)}
+                        />
+                    ))}
+                </div>
             </div>
 
             {/* Sección inferior del menú */}

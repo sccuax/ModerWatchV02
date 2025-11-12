@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useCallback } from 'react'; // ✅ Agregado useCallback
 import { jwtDecode } from "jwt-decode";
 
 import {
     validateLoginForm,
     loginRequest,
     saveAuthToken,
+    saveUserData,
     formatErrorMessage
 } from '../helper/authHelpers.js';
 
@@ -31,17 +32,20 @@ export const useLogin = (setUser) => {
     /**
      * Función que valida los campos en tiempo real
      * Se puede llamar cuando el usuario deja un campo (onBlur)
+     * ✅ Ahora envuelta en useCallback para evitar re-renders innecesarios
      */
-    const validateFields = () => {
+    const validateFields = useCallback(() => {
         const validation = validateLoginForm(email, password);
         setFieldErrors(validation.errors);
         return validation.isValid;
-    };
+    }, [email, password]); // ✅ Solo se recrea si cambia email o password
 
     /**
      * Función principal que maneja el proceso completo de login
+     * ✅ Ahora envuelta en useCallback para evitar re-renders innecesarios
      */
-    const handleLogin = async () => {
+    const handleLogin = useCallback(async () => {
+        console.log('🔐 Iniciando login...'); // ✅ Debug
         // Limpia errores previos
         setError(null);
         setFieldErrors({});
@@ -60,29 +64,36 @@ export const useLogin = (setUser) => {
         try {
             // PASO 3: Hace la petición al servidor usando el helper
             const response = await loginRequest(email, password);
+            console.log('📩 Respuesta del servidor:', response); // ✅ Debug
 
             // PASO 4: Si fue exitoso, guarda el token usando el helper
             if (response.token) {
                 saveAuthToken(response.token);
                 const decoded = jwtDecode(response.token);
-                setUser(decoded);
-                // Espera a que React actualice el estado antes de navegar
-                setTimeout(() => {
-                    navigate("/dashboard/admin");
-                }, 100);
+                console.log('🔓 Token decodificado:', decoded); // ✅ Debug
+
+                // Guarda los datos del usuario (incluyendo rol)
+                const userData = {
+                    ...response.user,
+                    role: decoded.role || response.user.role
+                };
+
+                saveUserData(userData);
+                setUser(decoded); // ✅ setUser ahora es estable gracias a useCallback en App.jsx
+                
+                // PASO 5: Marca el login como exitoso
+                setSuccess(true);
+
+                console.log(`✅ Redirigiendo a /dashboard/${decoded.role}`); // ✅ Debug
+                
+                // ✅ REDIRIGE SEGÚN EL ROL sin setTimeout
+                navigate(`/dashboard/${decoded.role}`, { replace: true });
             }
-
-            // PASO 5: Marca el login como exitoso
-            setSuccess(true);
-
-            // Aquí podrías hacer más cosas como:
-            // - Guardar datos del usuario en un contexto global
-            // - Redirigir a otra página
-            // - Llamar a un callback que te pasen como parámetro
 
             return response; // Retorna los datos para que el componente pueda usarlos
 
         } catch (err) {
+            console.error('❌ Error en login:', err); // ✅ Debug
             // Maneja errores usando el helper para formatear el mensaje
             const errorMessage = formatErrorMessage(err);
             setError(errorMessage);
@@ -94,19 +105,20 @@ export const useLogin = (setUser) => {
             // SIEMPRE ejecuta esto, haya error o no
             setIsLoading(false);
         }
-    };
+    }, [email, password, navigate, setUser]); // ✅ Todas las dependencias necesarias
 
     /**
      * Función para limpiar el formulario después de un login exitoso
      * o si el usuario quiere empezar de nuevo
+     * ✅ Ahora envuelta en useCallback
      */
-    const resetForm = () => {
+    const resetForm = useCallback(() => {
         setEmail('');
         setPassword('');
         setError(null);
         setSuccess(false);
         setFieldErrors({});
-    };
+    }, []); // ✅ No tiene dependencias, siempre es la misma función
 
     /**
      * Retorna todo lo que el componente necesita para funcionar

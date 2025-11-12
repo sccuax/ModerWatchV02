@@ -72,6 +72,26 @@ export const saveAuthToken = (token) => {
 };
 
 /**
+ * ✅ NUEVO: Guarda los datos del usuario (incluyendo el rol)
+ */
+export const saveUserData = (userData) => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('userData', JSON.stringify(userData));
+    }
+};
+
+/**
+ * ✅ NUEVO: Obtiene los datos del usuario guardados
+ */
+export const getUserData = () => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const data = localStorage.getItem('userData');
+        return data ? JSON.parse(data) : null;
+    }
+    return null;
+};
+
+/**
  * Obtiene el token de autenticación guardado
  */
 export const getAuthToken = () => {
@@ -88,6 +108,7 @@ export const removeAuthToken = () => {
     if (typeof window !== 'undefined' && window.localStorage) {
         localStorage.removeItem('token');
         localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
     }
 };
 

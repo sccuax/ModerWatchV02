@@ -70,7 +70,7 @@ const getUsersByStatus = async (req, res) => {
 // ✅ Create user CON NOTIFICACIÓN EN TIEMPO REAL
 const createUser = async (req, res) => {
   try {
-    const { name, surname, email, dateOfBirth, nationalId, message, password, status } = req.body;
+    const { name, surname, email, dateOfBirth, nationalId, message, password, status, role } = req.body;
 
     if (!name || !surname || !email || !dateOfBirth || !nationalId || !password) {
       return res.status(400).json({ error: "All fields are required" });
@@ -92,7 +92,8 @@ const createUser = async (req, res) => {
       nationalId,
       message,
       password,
-      status: status || 'pending' // Por defecto pending si no se especifica
+      status: status || 'pending', // Por defecto pending si no se especifica
+      role: role || 'user' // Por defecto role user
     });
 
     await newUser.save();
@@ -126,6 +127,32 @@ const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
+    const currentUser = req.user; 
+
+    // Verificar permisos: Admin o el mismo usuario
+    if (currentUser.role !== 'admin' && currentUser.id !== id) {
+      return res.status(403).json({ 
+        error: "Access denied",
+        message: "You can only update your own profile"
+      });
+    }
+
+
+    // Si es user regular, no puede cambiar su propio role o status
+    if (currentUser.role !== 'admin') {
+      if (updates.role) {
+        return res.status(403).json({ 
+          error: "Access denied",
+          message: "You cannot change your own role"
+        });
+      }
+      if (updates.status) {
+        return res.status(403).json({ 
+          error: "Access denied",
+          message: "You cannot change your own status"
+        });
+      }
+    }
     
     if (updates.password) {
       const salt = await bcrypt.genSalt(10);
@@ -150,6 +177,15 @@ const updateUserStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
+    const currentUser = req.user;
+
+    // Verificar que sea admin
+    if (currentUser.role !== 'admin') {
+      return res.status(403).json({ 
+        error: "Access denied",
+        message: "Only administrators can update user status"
+      });
+    }
     
     if (!status) {
       return res.status(400).json({ error: 'El campo status es requerido' });
@@ -219,7 +255,27 @@ const updateUserStatus = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
+    const currentUser = req.user;
+
+
+    // Verificar que sea admin
+    if (currentUser.role !== 'admin') {
+      return res.status(403).json({ 
+        error: "Access denied",
+        message: "Only administrators can delete users"
+      });
+    }
+
+    // Opcional: Prevenir que un admin se elimine a sí mismo
+    if (currentUser.id === id) {
+      return res.status(400).json({ 
+        error: "Bad request",
+        message: "You cannot delete your own account"
+      });
+    }
+
     const deletedUser = await User.findByIdAndDelete(id);
+
     
     if (!deletedUser) {
       return res.status(404).json({ error: "User not found" });

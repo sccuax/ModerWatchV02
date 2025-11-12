@@ -26,6 +26,9 @@ import Verify from '../../Images/icons/Verify.svg?react';
 // import WarningMessage from '../../Images/icons/Warning-message.svg?react';
 import Warning from '../../Images/icons/warning.svg?react';
 import Close from '../../Images/icons/close.svg?react';
+import Plus from '../../Images/icons/plus.svg?react';
+import RightArrow from '../../Images/icons/rightArrow.svg?react';
+import DownArrow from '../../Images/icons/downArrow.svg?react';
 
 // Dictionary of icons - comenta los que no estén importados arriba
 const icons = {
@@ -54,7 +57,10 @@ const icons = {
   verify: Verify,
   // warningMessage: WarningMessage,
   warning: Warning,
-  close: Close
+  close: Close,
+  plus: Plus,
+  rightArrow: RightArrow,
+  downArrow: DownArrow
 };
 
 // Dynamic icon component
